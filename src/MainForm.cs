@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System.Windows.Forms;
 using GraphVoronoi.Graphs;
 
 namespace GraphVoronoi
@@ -112,6 +113,11 @@ namespace GraphVoronoi
             this.graph = g ?? new Graph();
             this.graph.Changed += this.onGraphChanged;
 
+            this.currentDraggable = null;
+
+            this.setMode(Mode.Vertex);
+            this.setColor(0);
+
             this.onGraphChanged();
         }
 
@@ -125,9 +131,30 @@ namespace GraphVoronoi
             this.setGraph();
         }
 
+        private void openToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            this.openGraphDialog.ShowDialog();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            this.saveGraphDialog.ShowDialog();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void openGraphDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (File.Exists(this.openGraphDialog.FileName))
+                this.setGraph(Graph.FromFile(this.openGraphDialog.FileName, this.players));
+        }
+
+        private void saveGraphDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.graph.SaveToFile(this.saveGraphDialog.FileName, this.players);
         }
 
         private void setMode(Mode mode)

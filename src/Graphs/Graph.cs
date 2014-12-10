@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Graph
+    sealed partial class Graph
     {
         private readonly LinkedList<Vertex> vertices = new LinkedList<Vertex>();
         private readonly LinkedList<Edge> edges = new LinkedList<Edge>();

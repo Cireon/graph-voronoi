@@ -8,6 +8,7 @@ namespace GraphVoronoi.Graphs
         private readonly Edge edge;
         private readonly float t;
 
+        public Player Player { get { return this.player; } }
         public Edge Edge { get { return this.edge; } }
         public float T { get { return this.t; } }
 

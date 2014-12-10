@@ -47,6 +47,7 @@
     <Compile Include="GraphPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Graphs\GraphIO.cs" />
     <Compile Include="Graphs\IEdgeObject.cs" />
     <Compile Include="Graphs\Marker.cs" />
     <Compile Include="Graphs\Vertex.cs" />
