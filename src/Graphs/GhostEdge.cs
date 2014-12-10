@@ -22,11 +22,6 @@ namespace GraphVoronoi.Graphs
             graphics.DrawEdge(origin.Position, this.position, true);
         }
 
-        public bool OnMouseDown(PointF position)
-        {
-            return false;
-        }
-
         public void OnMouseMove(PointF newPosition)
         {
             this.position = newPosition;

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Edge : IMouseInputReceiver, IDrawable
+    sealed class Edge : IDrawable
     {
         private const float collisionThickness = 20f;
 
@@ -11,6 +13,8 @@ namespace GraphVoronoi.Graphs
 
         public Vertex From { get { return this.from; } }
         public Vertex To { get { return this.to; } }
+
+        private readonly SortedSet<IEdgeObject> objectSet = new SortedSet<IEdgeObject>(EdgeObjectComparer.Instance); 
 
         public double Length
         {
@@ -26,14 +30,49 @@ namespace GraphVoronoi.Graphs
         {
             this.from = from;
             this.to = to;
+
+            this.objectSet.Add(new VertexEdgeObject(from, 0));
+            this.objectSet.Add(new VertexEdgeObject(to, 1));
         }
 
         public void Draw(GraphicsHelper graphics)
         {
             graphics.DrawEdge(this.from.Position, this.to.Position);
+
+            if (this.from.Owner == null)
+                return;
+
+            var w = this.Length;
+            var diffX = this.To.Position.X - this.From.Position.X;
+            var diffY = this.To.Position.Y - this.From.Position.Y;
+
+            var objects = this.objectSet.ToList();
+
+            for (int i = 0; i < objects.Count; i++)
+            {
+                var prev = i - 1 >= 0 ? objects[i - 1] : null;
+                var curr = objects[i];
+                var next = i < objects.Count - 1 ? objects[i + 1] : null;
+
+                var t1 = curr.T;
+                var t2 = curr.T;
+
+                if (prev != null)
+                {
+                    t1 = .5f * (prev.T + curr.T) + .5f * (float)((curr.Distance - prev.Distance) / w);
+                }
+                if (next != null)
+                {
+                    t2 = .5f * (curr.T + next.T) + .5f * (float)((next.Distance - curr.Distance) / w);
+                }
+
+                graphics.DrawEdgeSegment(
+                    new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
+                    new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY), curr.Color);
+            }
         }
 
-        public bool OnMouseDown(PointF position)
+        public float? OnMouseDown(PointF position)
         {
             var x1 = this.from.Position.X;
             var y1 = this.from.Position.Y;
@@ -54,7 +93,20 @@ namespace GraphVoronoi.Graphs
             var pX = x1 + pR * Math.Cos(pA - edgeAngle);
             var pY = y1 + pR * Math.Sin(pA - edgeAngle);
 
-            return (pX >= x1 && pX <= x1 + width && pY >= y1 - .5 * halfHeight && pY <= y1 + .5 * halfHeight);
+            if (pX >= x1 && pX <= x1 + width && pY >= y1 - .5 * halfHeight && pY <= y1 + .5 * halfHeight)
+                return (float)((pX - x1) / width);
+
+            return null;
+        }
+
+        public void AddMarker(Marker m)
+        {
+            this.objectSet.Add(m);
+        }
+
+        public void RemoveMarker(Marker m)
+        {
+            this.objectSet.Remove(m);
         }
     }
 }

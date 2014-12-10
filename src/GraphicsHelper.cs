@@ -5,38 +5,54 @@ namespace GraphVoronoi
 {
     sealed class GraphicsHelper
     {
-        private const float vertexDrawRadius = 10f;
+        private const float vertexOuterDrawRadius = 10f;
+        private const float vertexInnerDrawRadius = 8f;
+        private const float edgeOuterThickness = 8f;
+        private const float edgeInnerThickness = 4f;
+        private const int ghostAlpha = 160;
 
         private readonly Graphics graphics;
-
-        private readonly Brush vertexBrush;
-        private readonly Pen edgePen, ghostPen;
 
         public GraphicsHelper(Graphics graphics)
         {
             this.graphics = graphics;
-
-            this.vertexBrush = Brushes.Black;
-            this.edgePen = new Pen(Color.Black, 6f)
-            {
-                Alignment = PenAlignment.Center
-            };
-
-            this.ghostPen = new Pen(Color.FromArgb(120, Color.Black), 6f)
-            {
-                Alignment = PenAlignment.Center
-            };
         }
 
-        public void DrawVertex(PointF position)
+        public void DrawVertex(PointF position, Color? color)
         {
-            const float r = GraphicsHelper.vertexDrawRadius;
-            this.graphics.FillEllipse(this.vertexBrush, position.X - r, position.Y - r, 2 * r, 2 * r);
+            const float r = GraphicsHelper.vertexOuterDrawRadius;
+
+            var brush = new SolidBrush(Color.Black);
+            this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
+
+            if (color.HasValue)
+                this.DrawMarker(position, color.Value);
+        }
+
+        public void DrawMarker(PointF position, Color color)
+        {
+            const float r = GraphicsHelper.vertexInnerDrawRadius;
+
+            var brush = new SolidBrush(color);
+            this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
         }
 
         public void DrawEdge(PointF from, PointF to, bool ghost = false)
         {
-            var pen = ghost ? this.ghostPen : this.edgePen;
+            var pen = new Pen(Color.FromArgb(ghost ? GraphicsHelper.ghostAlpha : 255, Color.Black), GraphicsHelper.edgeOuterThickness)
+            {
+                Alignment = PenAlignment.Center
+            };
+
+            this.graphics.DrawLine(pen, from, to);
+        }
+
+        public void DrawEdgeSegment(PointF from, PointF to, Color color, bool ghost = false)
+        {
+            var pen = new Pen(Color.FromArgb(ghost ? GraphicsHelper.ghostAlpha : 255, color), GraphicsHelper.edgeInnerThickness)
+            {
+                Alignment = PenAlignment.Center
+            };
 
             this.graphics.DrawLine(pen, from, to);
         }

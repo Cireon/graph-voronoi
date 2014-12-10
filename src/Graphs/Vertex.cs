@@ -4,10 +4,15 @@ namespace GraphVoronoi.Graphs
 {
     sealed class Vertex : IDraggable, IDrawable
     {
-        private const float collisionRadius = 12f;
+        public const float CollisionRadius = 15f;
 
         public PointF Position { get; private set; }
         private PointF? dragOffset;
+
+        private VertexOwner staticOwner;
+
+        public VertexOwner Owner { get { return this.staticOwner; } }
+        public Color Color { get { return this.Owner == null ? Color.Black : this.Owner.Color; } }
 
         public event VoidEventHandler Changed;
 
@@ -18,7 +23,7 @@ namespace GraphVoronoi.Graphs
 
         public void Draw(GraphicsHelper graphics)
         {
-            graphics.DrawVertex(this.Position);
+            graphics.DrawVertex(this.Position, this.Color);
         }
 
         public bool OnMouseDown(PointF point)
@@ -26,7 +31,7 @@ namespace GraphVoronoi.Graphs
             var dSq = (point.X - this.Position.X) * (point.X - this.Position.X) +
                 (point.Y - this.Position.Y) * (point.Y - this.Position.Y);
 
-            if (dSq > Vertex.collisionRadius * Vertex.collisionRadius)
+            if (dSq > Vertex.CollisionRadius * Vertex.CollisionRadius)
                 return false;
 
             this.dragOffset = new PointF(this.Position.X - point.X, this.Position.Y - point.Y);
@@ -54,6 +59,16 @@ namespace GraphVoronoi.Graphs
         {
             // todo: implement
             return false;
+        }
+
+        public void ResetStaticOwner()
+        {
+            this.staticOwner = null;
+        }
+
+        public void SetStaticOwner(VertexOwner owner)
+        {
+            this.staticOwner = owner;
         }
     }
 }

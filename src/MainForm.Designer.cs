@@ -39,6 +39,11 @@
             this.btnModeEdge = new System.Windows.Forms.Button();
             this.btnModeMarker = new System.Windows.Forms.Button();
             this.btnModeHover = new System.Windows.Forms.Button();
+            this.btnColorRed = new System.Windows.Forms.Button();
+            this.btnColorBlue = new System.Windows.Forms.Button();
+            this.btnColorGreen = new System.Windows.Forms.Button();
+            this.btnColorYellow = new System.Windows.Forms.Button();
+            this.chkCalculationDisabled = new System.Windows.Forms.CheckBox();
             this.panel = new GraphVoronoi.GraphPanel();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
@@ -145,6 +150,58 @@
             this.btnModeHover.UseVisualStyleBackColor = true;
             this.btnModeHover.Click += new System.EventHandler(this.btnModeHover_Click);
             // 
+            // btnColorRed
+            // 
+            this.btnColorRed.BackColor = System.Drawing.Color.Red;
+            this.btnColorRed.Enabled = false;
+            this.btnColorRed.Location = new System.Drawing.Point(1068, 180);
+            this.btnColorRed.Name = "btnColorRed";
+            this.btnColorRed.Size = new System.Drawing.Size(39, 27);
+            this.btnColorRed.TabIndex = 4;
+            this.btnColorRed.UseVisualStyleBackColor = false;
+            this.btnColorRed.Click += new System.EventHandler(this.btnColorRed_Click);
+            // 
+            // btnColorBlue
+            // 
+            this.btnColorBlue.BackColor = System.Drawing.Color.RoyalBlue;
+            this.btnColorBlue.Location = new System.Drawing.Point(1113, 180);
+            this.btnColorBlue.Name = "btnColorBlue";
+            this.btnColorBlue.Size = new System.Drawing.Size(39, 27);
+            this.btnColorBlue.TabIndex = 5;
+            this.btnColorBlue.UseVisualStyleBackColor = false;
+            this.btnColorBlue.Click += new System.EventHandler(this.btnColorBlue_Click);
+            // 
+            // btnColorGreen
+            // 
+            this.btnColorGreen.BackColor = System.Drawing.Color.Green;
+            this.btnColorGreen.Location = new System.Drawing.Point(1158, 180);
+            this.btnColorGreen.Name = "btnColorGreen";
+            this.btnColorGreen.Size = new System.Drawing.Size(39, 27);
+            this.btnColorGreen.TabIndex = 6;
+            this.btnColorGreen.UseVisualStyleBackColor = false;
+            this.btnColorGreen.Click += new System.EventHandler(this.btnColorGreen_Click);
+            // 
+            // btnColorYellow
+            // 
+            this.btnColorYellow.BackColor = System.Drawing.Color.Yellow;
+            this.btnColorYellow.Location = new System.Drawing.Point(1203, 180);
+            this.btnColorYellow.Name = "btnColorYellow";
+            this.btnColorYellow.Size = new System.Drawing.Size(39, 27);
+            this.btnColorYellow.TabIndex = 7;
+            this.btnColorYellow.UseVisualStyleBackColor = false;
+            this.btnColorYellow.Click += new System.EventHandler(this.btnColorYellow_Click);
+            // 
+            // chkCalculationDisabled
+            // 
+            this.chkCalculationDisabled.AutoSize = true;
+            this.chkCalculationDisabled.Location = new System.Drawing.Point(1058, 213);
+            this.chkCalculationDisabled.Name = "chkCalculationDisabled";
+            this.chkCalculationDisabled.Size = new System.Drawing.Size(160, 17);
+            this.chkCalculationDisabled.TabIndex = 8;
+            this.chkCalculationDisabled.Text = "&Disable Voronoi Calculations";
+            this.chkCalculationDisabled.UseVisualStyleBackColor = true;
+            this.chkCalculationDisabled.CheckedChanged += new System.EventHandler(this.chkCalculationDisabled_CheckedChanged);
+            // 
             // panel
             // 
             this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -160,6 +217,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.chkCalculationDisabled);
+            this.Controls.Add(this.btnColorYellow);
+            this.Controls.Add(this.btnColorGreen);
+            this.Controls.Add(this.btnColorBlue);
+            this.Controls.Add(this.btnColorRed);
             this.Controls.Add(this.btnModeHover);
             this.Controls.Add(this.btnModeMarker);
             this.Controls.Add(this.btnModeEdge);
@@ -189,6 +251,11 @@
         private System.Windows.Forms.Button btnModeEdge;
         private System.Windows.Forms.Button btnModeMarker;
         private System.Windows.Forms.Button btnModeHover;
+        private System.Windows.Forms.Button btnColorRed;
+        private System.Windows.Forms.Button btnColorBlue;
+        private System.Windows.Forms.Button btnColorGreen;
+        private System.Windows.Forms.Button btnColorYellow;
+        private System.Windows.Forms.CheckBox chkCalculationDisabled;
 
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GraphVoronoi
 {
-    interface IDraggable : IMouseInputReceiver
+    interface IDraggable
     {
         void OnMouseMove(PointF newPosition);
         void OnMouseRelease();

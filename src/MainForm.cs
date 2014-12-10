@@ -16,6 +16,10 @@ namespace GraphVoronoi
         private Graph graph;
         private IDraggable currentDraggable;
         private Mode currentMode = Mode.Vertex;
+        private int currentPlayerIndex;
+        private Player currentPlayer { get { return this.players[this.currentPlayerIndex]; } }
+
+        private readonly Player[] players;
 
         public MainForm()
         {
@@ -27,6 +31,14 @@ namespace GraphVoronoi
             this.panel.MouseDown += onMouseDown;
             this.panel.MouseUp += onMouseUp;
             this.panel.MouseMove += onMouseMove;
+
+            this.players = new[]
+            {
+                new Player(this.btnColorRed.BackColor),
+                new Player(this.btnColorBlue.BackColor),
+                new Player(this.btnColorGreen.BackColor),
+                new Player(this.btnColorYellow.BackColor)
+            };
         }
 
         private void onMouseDown(object sender, MouseEventArgs mouseEventArgs)
@@ -57,9 +69,21 @@ namespace GraphVoronoi
                     }
                     else if (mouseEventArgs.Button == MouseButtons.Right)
                     {
-                        var edge = this.graph.GetEdgeAt(mouseEventArgs.Location);
-                        if (edge != null)
-                            this.graph.RemoveEdge(edge);
+                        var tuple = this.graph.GetEdgeAt(mouseEventArgs.Location);
+                        if (tuple != null)
+                            this.graph.RemoveEdge(tuple.Item1);
+                    }
+                    break;
+                case Mode.Marker:
+                    if (mouseEventArgs.Button == MouseButtons.Left)
+                    {
+                        var tuple = this.graph.GetEdgeAt(mouseEventArgs.Location);
+                        if (tuple != null)
+                            this.graph.AddMarker(this.currentPlayer, tuple.Item1, tuple.Item2);
+                    }
+                    else if (mouseEventArgs.Button == MouseButtons.Right)
+                    {
+                        
                     }
                     break;
             }
@@ -114,6 +138,19 @@ namespace GraphVoronoi
             this.btnModeEdge.Enabled = this.currentMode != Mode.Edge;
             this.btnModeMarker.Enabled = this.currentMode != Mode.Marker;
             this.btnModeHover.Enabled = this.currentMode != Mode.Hover;
+
+            if (mode == Mode.Hover)
+                this.chkCalculationDisabled.Checked = false;
+        }
+
+        private void setColor(int i)
+        {
+            this.currentPlayerIndex = i;
+
+            this.btnColorRed.Enabled = this.currentPlayerIndex != 0;
+            this.btnColorBlue.Enabled = this.currentPlayerIndex != 1;
+            this.btnColorGreen.Enabled = this.currentPlayerIndex != 2;
+            this.btnColorYellow.Enabled = this.currentPlayerIndex != 3;
         }
 
         private void btnModeVertex_Click(object sender, System.EventArgs e)
@@ -134,6 +171,34 @@ namespace GraphVoronoi
         private void btnModeHover_Click(object sender, System.EventArgs e)
         {
             this.setMode(Mode.Hover);
+        }
+
+        private void btnColorRed_Click(object sender, System.EventArgs e)
+        {
+            this.setColor(0);
+        }
+
+        private void btnColorBlue_Click(object sender, System.EventArgs e)
+        {
+            this.setColor(1);
+        }
+
+        private void btnColorGreen_Click(object sender, System.EventArgs e)
+        {
+            this.setColor(2);
+        }
+
+        private void btnColorYellow_Click(object sender, System.EventArgs e)
+        {
+            this.setColor(3);
+        }
+
+        private void chkCalculationDisabled_CheckedChanged(object sender, System.EventArgs e)
+        {
+            this.graph.CalculationsDisabled = this.chkCalculationDisabled.Checked;
+
+            if (this.chkCalculationDisabled.Checked && this.currentMode == Mode.Hover)
+                this.setMode(Mode.Marker);
         }
     }
 }
