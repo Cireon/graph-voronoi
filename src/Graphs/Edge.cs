@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Edge : IMouseInputReceiver
+    sealed class Edge : IMouseInputReceiver, IDrawable
     {
-        private const float collisionThickness = .1f;
+        private const float collisionThickness = 20f;
 
         private readonly Vertex from, to;
 
@@ -35,7 +35,26 @@ namespace GraphVoronoi.Graphs
 
         public bool OnMouseDown(PointF position)
         {
-            return false;
+            var x1 = this.from.Position.X;
+            var y1 = this.from.Position.Y;
+            var x2 = this.to.Position.X;
+            var y2 = this.to.Position.Y;
+
+            var width = this.Length;
+            const double halfHeight = .5 * Edge.collisionThickness;
+
+            var edgeAngle = Math.Atan2(y2 - y1, x2 - x1);
+
+            var diffX = position.X - x1;
+            var diffY = position.Y - y1;
+
+            var pA = Math.Atan2(diffY, diffX);
+            var pR = Math.Sqrt(diffX * diffX + diffY * diffY);
+
+            var pX = x1 + pR * Math.Cos(pA - edgeAngle);
+            var pY = y1 + pR * Math.Sin(pA - edgeAngle);
+
+            return (pX >= x1 && pX <= x1 + width && pY >= y1 - .5 * halfHeight && pY <= y1 + .5 * halfHeight);
         }
     }
 }

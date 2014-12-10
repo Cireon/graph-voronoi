@@ -32,6 +32,11 @@ namespace GraphVoronoi
 
         private void onPaint(object sender, PaintEventArgs paintEventArgs)
         {
+            if (this.DesignMode)
+            {
+                paintEventArgs.Graphics.Clear(Color.Gray);
+            }
+
             paintEventArgs.Graphics.DrawImage(this.image, new Point(0, 0));
         }
 

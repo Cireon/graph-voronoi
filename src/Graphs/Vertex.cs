@@ -2,9 +2,9 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Vertex : IDraggable
+    sealed class Vertex : IDraggable, IDrawable
     {
-        private const float collisionRadius = 10f;
+        private const float collisionRadius = 12f;
 
         public PointF Position { get; private set; }
         private PointF? dragOffset;
@@ -48,6 +48,12 @@ namespace GraphVoronoi.Graphs
 
             if (this.Changed != null)
                 this.Changed();
+        }
+
+        public bool HasEdgeTo(Vertex other)
+        {
+            // todo: implement
+            return false;
         }
     }
 }

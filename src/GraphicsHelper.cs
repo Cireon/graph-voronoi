@@ -8,10 +8,9 @@ namespace GraphVoronoi
         private const float vertexDrawRadius = 10f;
 
         private readonly Graphics graphics;
-        public Graphics Graphics { get { return this.graphics; } }
 
         private readonly Brush vertexBrush;
-        private readonly Pen edgePen;
+        private readonly Pen edgePen, ghostPen;
 
         public GraphicsHelper(Graphics graphics)
         {
@@ -19,6 +18,11 @@ namespace GraphVoronoi
 
             this.vertexBrush = Brushes.Black;
             this.edgePen = new Pen(Color.Black, 6f)
+            {
+                Alignment = PenAlignment.Center
+            };
+
+            this.ghostPen = new Pen(Color.FromArgb(120, Color.Black), 6f)
             {
                 Alignment = PenAlignment.Center
             };
@@ -30,9 +34,11 @@ namespace GraphVoronoi
             this.graphics.FillEllipse(this.vertexBrush, position.X - r, position.Y - r, 2 * r, 2 * r);
         }
 
-        public void DrawEdge(PointF from, PointF to)
+        public void DrawEdge(PointF from, PointF to, bool ghost = false)
         {
-            this.graphics.DrawLine(this.edgePen, from, to);
+            var pen = ghost ? this.ghostPen : this.edgePen;
+
+            this.graphics.DrawLine(pen, from, to);
         }
     }
 }

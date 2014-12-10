@@ -8,23 +8,11 @@ namespace GraphVoronoi.Graphs
     {
         private readonly LinkedList<Vertex> vertices = new LinkedList<Vertex>();
         private readonly LinkedList<Edge> edges = new LinkedList<Edge>();
+        private GhostEdge currentGhostEdge;
 
         public event VoidEventHandler Changed;
 
-        public Graph()
-        {
-            Vertex v1, v2, v3, v4;
-
-            this.AddVertex(v1 = new Vertex(new PointF(100, 100)));
-            this.AddVertex(v2 = new Vertex(new PointF(200, 200)));
-            this.AddVertex(v3 = new Vertex(new PointF(300, 100)));
-            this.AddVertex(v4 = new Vertex(new PointF(200, 400)));
-
-            this.edges.AddLast(new Edge(v1, v2));
-            this.edges.AddLast(new Edge(v2, v3));
-            this.edges.AddLast(new Edge(v3, v1));
-            this.edges.AddLast(new Edge(v2, v4));
-        }
+        public Graph() { }
 
         private void onChange()
         {
@@ -36,16 +24,23 @@ namespace GraphVoronoi.Graphs
         {
             this.vertices.AddLast(v);
             v.Changed += this.onChange;
+            this.onChange();
+        }
+
+        public void AddEdge(Edge e)
+        {
+            this.edges.AddLast(e);
+            this.onChange();
         }
 
         public void RemoveVertex(Vertex v)
         {
             this.vertices.Remove(v);
             
-            while (this.edges.First.Value.From == v || this.edges.First.Value.To == v)
+            while (this.edges.Count > 0 && (this.edges.First.Value.From == v || this.edges.First.Value.To == v))
                 this.edges.RemoveFirst();
             var curr = this.edges.First;
-            while (curr.Next != null)
+            while (curr != null && curr.Next != null)
             {
                 if (curr.Next.Value.From == v || curr.Next.Value.To == v)
                     this.edges.Remove(curr.Next);
@@ -64,13 +59,34 @@ namespace GraphVoronoi.Graphs
             this.onChange();
         }
 
-        public IDraggable GetVertexAt(PointF position)
+        public void RegisterGhostEdge(GhostEdge edge)
+        {
+            this.currentGhostEdge = edge;
+            this.currentGhostEdge.Changed += this.onChange;
+        }
+
+        public void UnregisterGhostEdge()
+        {
+            this.currentGhostEdge.Changed -= this.onChange;
+            this.currentGhostEdge = null;
+            this.onChange();
+        }
+
+        public Vertex GetVertexAt(PointF position)
         {
             return this.vertices.FirstOrDefault(vertex => vertex.OnMouseDown(position));
         }
 
+        public Edge GetEdgeAt(PointF position)
+        {
+            return this.edges.FirstOrDefault(edge => edge.OnMouseDown(position));
+        }
+
         public void Draw(GraphicsHelper graphics)
         {
+            if (this.currentGhostEdge != null)
+                this.currentGhostEdge.Draw(graphics);
+
             foreach (var e in this.edges)
                 e.Draw(graphics);
             foreach (var v in this.vertices)
