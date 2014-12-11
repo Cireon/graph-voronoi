@@ -4,7 +4,7 @@ namespace GraphVoronoi.Graphs
 {
     sealed class Vertex : IDraggable
     {
-        public const float CollisionRadius = 15f;
+        public const float CollisionRadius = 20f;
 
         public PointF Position { get; private set; }
         private PointF? dragOffset;

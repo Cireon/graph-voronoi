@@ -34,7 +34,10 @@ namespace GraphVoronoi.Graphs
             this.graph.UnregisterGhostEdge();
 
             var vertex = this.graph.GetVertexAt(this.position);
-            if (vertex == null || vertex.HasEdgeTo(this.origin))
+
+            if (vertex == null)
+                this.graph.AddVertex(vertex = new Vertex(this.position));
+            if (vertex.HasEdgeTo(this.origin))
                 return;
             
             this.graph.AddEdge(new Edge(this.origin, vertex));
