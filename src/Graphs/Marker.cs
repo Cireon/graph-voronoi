@@ -64,6 +64,11 @@ namespace GraphVoronoi.Graphs
                 newT = tuple.Item2;
             }
 
+            if (newT < 0.01)
+                newT = 0.01f;
+            if (newT > 0.99)
+                newT = 0.99f;
+
             this.Edge.RemoveMarker(this);
             this.Edge = newEdge;
             this.T = newT;
