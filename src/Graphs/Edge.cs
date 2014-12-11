@@ -7,7 +7,7 @@ namespace GraphVoronoi.Graphs
 {
     sealed class Edge : IDrawable
     {
-        private const float collisionThickness = 20f;
+        private const float collisionThickness = 40f;
 
         private readonly Vertex from, to;
 
@@ -74,6 +74,11 @@ namespace GraphVoronoi.Graphs
 
         public float? OnMouseDown(PointF position)
         {
+            return this.ProjectPoint(position, true);
+        }
+
+        public float? ProjectPoint(PointF position, bool failOnNoCollision = false)
+        {
             var x1 = this.from.Position.X;
             var y1 = this.from.Position.Y;
             var x2 = this.to.Position.X;
@@ -93,7 +98,7 @@ namespace GraphVoronoi.Graphs
             var pX = x1 + pR * Math.Cos(pA - edgeAngle);
             var pY = y1 + pR * Math.Sin(pA - edgeAngle);
 
-            if (pX >= x1 && pX <= x1 + width && pY >= y1 - .5 * halfHeight && pY <= y1 + .5 * halfHeight)
+            if (!failOnNoCollision || (pX >= x1 && pX <= x1 + width && pY >= y1 - .5 * halfHeight && pY <= y1 + .5 * halfHeight))
                 return (float)((pX - x1) / width);
 
             return null;

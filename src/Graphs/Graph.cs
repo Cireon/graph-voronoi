@@ -25,8 +25,6 @@ namespace GraphVoronoi.Graphs
             }
         }
 
-        public Graph() { }
-
         private void onChange()
         {
             this.recalculateDistances();
@@ -50,8 +48,9 @@ namespace GraphVoronoi.Graphs
         public void AddMarker(Player p, Edge e, float t)
         {
             Marker m;
-            this.markers.AddLast(m = new Marker(p, e, t));
+            this.markers.AddLast(m = new Marker(this, p, e, t));
             e.AddMarker(m);
+            m.Changed += this.onChange;
             this.onChange();
         }
 
@@ -96,6 +95,7 @@ namespace GraphVoronoi.Graphs
         {
             this.markers.Remove(m);
             m.Edge.RemoveMarker(m);
+            m.Changed -= this.onChange;
             this.onChange();
         }
 

@@ -2,47 +2,77 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Marker : IDrawable, IEdgeObject
+    sealed class Marker : IDrawable, IEdgeObject, IDraggable
     {
+        private readonly Graph graph;
         private readonly Player player;
-        private readonly Edge edge;
-        private readonly float t;
 
         public Player Player { get { return this.player; } }
-        public Edge Edge { get { return this.edge; } }
-        public float T { get { return this.t; } }
+        public Edge Edge { get; private set; }
+        public float T { get; private set; }
 
         public Color Color { get { return this.player.Color; } }
         public double Distance { get { return 0; } }
 
-        public PointF Position
+        public event VoidEventHandler Changed;
+
+        private PointF position
         {
             get
             {
-                var diffX = this.edge.To.Position.X - this.edge.From.Position.X;
-                var diffY = this.edge.To.Position.Y - this.edge.From.Position.Y;
-                return new PointF(this.edge.From.Position.X + this.t * diffX, this.edge.From.Position.Y + this.t * diffY);
+                var diffX = this.Edge.To.Position.X - this.Edge.From.Position.X;
+                var diffY = this.Edge.To.Position.Y - this.Edge.From.Position.Y;
+                return new PointF(this.Edge.From.Position.X + this.T * diffX, this.Edge.From.Position.Y + this.T * diffY);
             }
         }
 
-        public Marker(Player player, Edge edge, float t)
+        public Marker(Graph graph, Player player, Edge edge, float t)
         {
+            this.graph = graph;
             this.player = player;
-            this.edge = edge;
-            this.t = t;
+            this.Edge = edge;
+            this.T = t;
         }
 
         public bool OnMouseDown(PointF point)
         {
-            var dSq = (point.X - this.Position.X) * (point.X - this.Position.X) +
-                (point.Y - this.Position.Y) * (point.Y - this.Position.Y);
+            var dSq = (point.X - this.position.X) * (point.X - this.position.X) +
+                (point.Y - this.position.Y) * (point.Y - this.position.Y);
 
             return dSq <= Vertex.CollisionRadius * Vertex.CollisionRadius;
         }
 
         public void Draw(GraphicsHelper graphics)
         {
-            graphics.DrawMarker(this.Position, this.Color);
+            graphics.DrawMarker(this.position, this.Color);
         }
+
+        public void OnMouseMove(PointF newPosition)
+        {
+            Edge newEdge;
+            float newT;
+
+            var tuple = this.graph.GetEdgeAt(newPosition);
+            if (tuple == null)
+            {
+                newEdge = this.Edge;
+                newT = this.Edge.ProjectPoint(newPosition).GetValueOrDefault(0);
+            }
+            else
+            {
+                newEdge = tuple.Item1;
+                newT = tuple.Item2;
+            }
+
+            this.Edge.RemoveMarker(this);
+            this.Edge = newEdge;
+            this.T = newT;
+            this.Edge.AddMarker(this);
+
+            if (this.Changed != null)
+                this.Changed();
+        }
+
+        public void OnMouseRelease() { }
     }
 }

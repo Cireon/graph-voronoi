@@ -76,16 +76,19 @@ namespace GraphVoronoi
                     }
                     break;
                 case Mode.Marker:
-                    if (mouseEventArgs.Button == MouseButtons.Left)
+                    var marker = this.graph.GetMarkerAt(mouseEventArgs.Location);
+
+                    if (marker == null && mouseEventArgs.Button == MouseButtons.Left)
                     {
                         var tuple = this.graph.GetEdgeAt(mouseEventArgs.Location);
                         if (tuple != null)
                             this.graph.AddMarker(this.currentPlayer, tuple.Item1, tuple.Item2);
                     }
+                    else if (mouseEventArgs.Button == MouseButtons.Left)
+                        this.currentDraggable = marker;
                     else if (mouseEventArgs.Button == MouseButtons.Right)
-                    {
-                        
-                    }
+                        if (marker != null)
+                            this.graph.RemoveMarker(marker);
                     break;
             }
         }
