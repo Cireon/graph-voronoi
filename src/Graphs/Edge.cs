@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Edge : IDrawable
+    sealed class Edge
     {
         private const float collisionThickness = 40f;
 
@@ -35,7 +35,7 @@ namespace GraphVoronoi.Graphs
             this.objectSet.Add(new VertexEdgeObject(to, 1));
         }
 
-        public void Draw(GraphicsHelper graphics)
+        public void Draw(GraphicsHelper graphics, PlayerScores scores)
         {
             graphics.DrawEdge(this.from.Position, this.to.Position);
 
@@ -69,6 +69,7 @@ namespace GraphVoronoi.Graphs
                 graphics.DrawEdgeSegment(
                     new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
                     new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY), curr.Color);
+                scores.AddScore(curr.Player, (t2 - t1) * w);
             }
         }
 

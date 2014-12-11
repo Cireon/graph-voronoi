@@ -12,10 +12,12 @@ namespace GraphVoronoi
         private const int ghostAlpha = 160;
 
         private readonly Graphics graphics;
+        private readonly Size size;
 
-        public GraphicsHelper(Graphics graphics)
+        public GraphicsHelper(Graphics graphics, Size size)
         {
             this.graphics = graphics;
+            this.size = size;
         }
 
         public void DrawVertex(PointF position, Color? color)
@@ -55,6 +57,13 @@ namespace GraphVoronoi
             };
 
             this.graphics.DrawLine(pen, from, to);
+        }
+
+        public void DrawScoreBar(int i, Color color, double ratio)
+        {
+            var pen = new Pen(Color.FromArgb(160, color), 10) { Alignment = PenAlignment.Center };
+            var y = this.size.Height - 32 - 5 - i * 15;
+            this.graphics.DrawLine(pen, 32, y, 32 + (float)ratio * (this.size.Width - 64), y);
         }
     }
 }

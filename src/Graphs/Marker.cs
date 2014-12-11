@@ -2,7 +2,7 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Marker : IDrawable, IEdgeObject, IDraggable
+    sealed class Marker : IEdgeObject, IDraggable
     {
         private readonly Graph graph;
         private readonly Player player;

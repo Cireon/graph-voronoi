@@ -7,6 +7,7 @@ namespace GraphVoronoi.Graphs
     {
         Color Color { get; }
         float T { get; }
+        Player Player { get; }
         double Distance { get; }
     }
 
@@ -14,6 +15,11 @@ namespace GraphVoronoi.Graphs
     {
         private readonly Vertex vertex;
         private readonly float t;
+
+        public Player Player
+        {
+            get { return this.vertex.Owner.Player; }
+        }
 
         public Color Color
         {

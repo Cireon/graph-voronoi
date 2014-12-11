@@ -53,7 +53,6 @@
     <Compile Include="Graphs\Vertex.cs" />
     <Compile Include="Graphs\VertexOwner.cs" />
     <Compile Include="IDraggable.cs" />
-    <Compile Include="IDrawable.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +60,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerScores.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">

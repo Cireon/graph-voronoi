@@ -7,6 +7,7 @@ namespace GraphVoronoi.Graphs
 {
     sealed partial class Graph
     {
+        private readonly Player[] players;
         private readonly LinkedList<Vertex> vertices = new LinkedList<Vertex>();
         private readonly LinkedList<Edge> edges = new LinkedList<Edge>();
         private readonly LinkedList<Marker> markers = new LinkedList<Marker>(); 
@@ -23,6 +24,11 @@ namespace GraphVoronoi.Graphs
                 this.calculationsDisabled = value;
                 this.onArithmeticChange();
             }
+        }
+
+        public Graph(Player[] players)
+        {
+            this.players = players;
         }
 
         private void onVisualChange()
@@ -146,12 +152,24 @@ namespace GraphVoronoi.Graphs
             if (this.currentGhostEdge != null)
                 this.currentGhostEdge.Draw(graphics);
 
+            var scores = new PlayerScores(this.players);
+
             foreach (var e in this.edges)
-                e.Draw(graphics);
+                e.Draw(graphics, scores);
             foreach (var v in this.vertices)
                 v.Draw(graphics);
             foreach (var m in this.markers)
                 m.Draw(graphics);
+
+            if (this.CalculationsDisabled)
+                return;
+
+            var scoresNorm = scores.GetScoresNormalised();
+            if (scoresNorm == null)
+                return;
+
+            for (int i = 0; i < this.players.Length; i++)
+                graphics.DrawScoreBar(this.players.Length - 1 - i, this.players[i].Color, scoresNorm[this.players[i]]);
         }
 
         private void recalculateDistances()

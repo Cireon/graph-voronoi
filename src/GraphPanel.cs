@@ -55,7 +55,7 @@ namespace GraphVoronoi
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             if (graph != null)
-                graph.Draw(new GraphicsHelper(graphics));
+                graph.Draw(new GraphicsHelper(graphics, this.Size));
 
             var tmp = this.image;
             this.image = this.backbuffer;

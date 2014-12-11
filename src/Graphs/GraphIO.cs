@@ -30,7 +30,7 @@ namespace GraphVoronoi.Graphs
 
         public static Graph FromFile(string file, Player[] players)
         {
-            var graph = new Graph { CalculationsDisabled = true };
+            var graph = new Graph(players) { CalculationsDisabled = true };
 
             var vertices = new List<Vertex>();
             var edges = new List<Edge>();

@@ -2,7 +2,7 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Vertex : IDraggable, IDrawable
+    sealed class Vertex : IDraggable
     {
         public const float CollisionRadius = 15f;
 

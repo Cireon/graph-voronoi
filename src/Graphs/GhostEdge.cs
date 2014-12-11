@@ -2,7 +2,7 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class GhostEdge : IDraggable, IDrawable
+    sealed class GhostEdge : IDraggable
     {
         private readonly Graph graph;
         private readonly Vertex origin;

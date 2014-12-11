@@ -25,13 +25,6 @@ namespace GraphVoronoi
         {
             InitializeComponent();
 
-            this.setGraph();
-            this.Resize += (sender, args) => this.onGraphChanged();
-
-            this.panel.MouseDown += onMouseDown;
-            this.panel.MouseUp += onMouseUp;
-            this.panel.MouseMove += onMouseMove;
-
             this.players = new[]
             {
                 new Player(this.btnColorRed.BackColor),
@@ -39,6 +32,13 @@ namespace GraphVoronoi
                 new Player(this.btnColorGreen.BackColor),
                 new Player(this.btnColorYellow.BackColor)
             };
+
+            this.setGraph();
+            this.Resize += (sender, args) => this.onGraphChanged();
+
+            this.panel.MouseDown += onMouseDown;
+            this.panel.MouseUp += onMouseUp;
+            this.panel.MouseMove += onMouseMove;
         }
 
         private void onMouseDown(object sender, MouseEventArgs mouseEventArgs)
@@ -112,7 +112,7 @@ namespace GraphVoronoi
             if (this.graph != null)
                 this.graph.Changed -= this.onGraphChanged;
 
-            this.graph = g ?? new Graph();
+            this.graph = g ?? new Graph(this.players);
             this.graph.Changed += this.onGraphChanged;
 
             this.currentDraggable = null;
