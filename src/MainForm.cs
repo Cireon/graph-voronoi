@@ -10,8 +10,7 @@ namespace GraphVoronoi
         {
             Vertex,
             Edge,
-            Marker,
-            Hover
+            Marker
         }
 
         private Graph graph;
@@ -167,10 +166,6 @@ namespace GraphVoronoi
             this.btnModeVertex.Enabled = this.currentMode != Mode.Vertex;
             this.btnModeEdge.Enabled = this.currentMode != Mode.Edge;
             this.btnModeMarker.Enabled = this.currentMode != Mode.Marker;
-            this.btnModeHover.Enabled = this.currentMode != Mode.Hover;
-
-            if (mode == Mode.Hover)
-                this.chkCalculationDisabled.Checked = false;
         }
 
         private void setColor(int i)
@@ -198,11 +193,6 @@ namespace GraphVoronoi
             this.setMode(Mode.Marker);
         }
 
-        private void btnModeHover_Click(object sender, System.EventArgs e)
-        {
-            this.setMode(Mode.Hover);
-        }
-
         private void btnColorRed_Click(object sender, System.EventArgs e)
         {
             this.setColor(0);
@@ -226,9 +216,6 @@ namespace GraphVoronoi
         private void chkCalculationDisabled_CheckedChanged(object sender, System.EventArgs e)
         {
             this.graph.CalculationsDisabled = this.chkCalculationDisabled.Checked;
-
-            if (this.chkCalculationDisabled.Checked && this.currentMode == Mode.Hover)
-                this.setMode(Mode.Marker);
         }
     }
 }

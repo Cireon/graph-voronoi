@@ -38,7 +38,6 @@
             this.btnModeVertex = new System.Windows.Forms.Button();
             this.btnModeEdge = new System.Windows.Forms.Button();
             this.btnModeMarker = new System.Windows.Forms.Button();
-            this.btnModeHover = new System.Windows.Forms.Button();
             this.btnColorRed = new System.Windows.Forms.Button();
             this.btnColorBlue = new System.Windows.Forms.Button();
             this.btnColorGreen = new System.Windows.Forms.Button();
@@ -77,7 +76,7 @@
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -87,7 +86,7 @@
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -97,14 +96,14 @@
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -143,22 +142,11 @@
             this.btnModeMarker.UseVisualStyleBackColor = true;
             this.btnModeMarker.Click += new System.EventHandler(this.btnModeMarker_Click);
             // 
-            // btnModeHover
-            // 
-            this.btnModeHover.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnModeHover.Location = new System.Drawing.Point(1058, 147);
-            this.btnModeHover.Name = "btnModeHover";
-            this.btnModeHover.Size = new System.Drawing.Size(194, 27);
-            this.btnModeHover.TabIndex = 0;
-            this.btnModeHover.Text = "&Hover Mode";
-            this.btnModeHover.UseVisualStyleBackColor = true;
-            this.btnModeHover.Click += new System.EventHandler(this.btnModeHover_Click);
-            // 
             // btnColorRed
             // 
             this.btnColorRed.BackColor = System.Drawing.Color.Red;
             this.btnColorRed.Enabled = false;
-            this.btnColorRed.Location = new System.Drawing.Point(1068, 180);
+            this.btnColorRed.Location = new System.Drawing.Point(1068, 147);
             this.btnColorRed.Name = "btnColorRed";
             this.btnColorRed.Size = new System.Drawing.Size(39, 27);
             this.btnColorRed.TabIndex = 4;
@@ -168,7 +156,7 @@
             // btnColorBlue
             // 
             this.btnColorBlue.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnColorBlue.Location = new System.Drawing.Point(1113, 180);
+            this.btnColorBlue.Location = new System.Drawing.Point(1113, 147);
             this.btnColorBlue.Name = "btnColorBlue";
             this.btnColorBlue.Size = new System.Drawing.Size(39, 27);
             this.btnColorBlue.TabIndex = 5;
@@ -178,7 +166,7 @@
             // btnColorGreen
             // 
             this.btnColorGreen.BackColor = System.Drawing.Color.Green;
-            this.btnColorGreen.Location = new System.Drawing.Point(1158, 180);
+            this.btnColorGreen.Location = new System.Drawing.Point(1158, 147);
             this.btnColorGreen.Name = "btnColorGreen";
             this.btnColorGreen.Size = new System.Drawing.Size(39, 27);
             this.btnColorGreen.TabIndex = 6;
@@ -188,7 +176,7 @@
             // btnColorYellow
             // 
             this.btnColorYellow.BackColor = System.Drawing.Color.Yellow;
-            this.btnColorYellow.Location = new System.Drawing.Point(1203, 180);
+            this.btnColorYellow.Location = new System.Drawing.Point(1203, 147);
             this.btnColorYellow.Name = "btnColorYellow";
             this.btnColorYellow.Size = new System.Drawing.Size(39, 27);
             this.btnColorYellow.TabIndex = 7;
@@ -198,7 +186,7 @@
             // chkCalculationDisabled
             // 
             this.chkCalculationDisabled.AutoSize = true;
-            this.chkCalculationDisabled.Location = new System.Drawing.Point(1058, 213);
+            this.chkCalculationDisabled.Location = new System.Drawing.Point(1058, 180);
             this.chkCalculationDisabled.Name = "chkCalculationDisabled";
             this.chkCalculationDisabled.Size = new System.Drawing.Size(160, 17);
             this.chkCalculationDisabled.TabIndex = 8;
@@ -238,7 +226,6 @@
             this.Controls.Add(this.btnColorGreen);
             this.Controls.Add(this.btnColorBlue);
             this.Controls.Add(this.btnColorRed);
-            this.Controls.Add(this.btnModeHover);
             this.Controls.Add(this.btnModeMarker);
             this.Controls.Add(this.btnModeEdge);
             this.Controls.Add(this.btnModeVertex);
@@ -266,7 +253,6 @@
         private System.Windows.Forms.Button btnModeVertex;
         private System.Windows.Forms.Button btnModeEdge;
         private System.Windows.Forms.Button btnModeMarker;
-        private System.Windows.Forms.Button btnModeHover;
         private System.Windows.Forms.Button btnColorRed;
         private System.Windows.Forms.Button btnColorBlue;
         private System.Windows.Forms.Button btnColorGreen;

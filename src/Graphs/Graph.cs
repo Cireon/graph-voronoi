@@ -21,28 +21,33 @@ namespace GraphVoronoi.Graphs
             set
             {
                 this.calculationsDisabled = value;
-                this.onChange();
+                this.onArithmeticChange();
             }
         }
 
-        private void onChange()
+        private void onVisualChange()
         {
-            this.recalculateDistances();
             if (this.Changed != null)
                 this.Changed();
+        }
+
+        private void onArithmeticChange()
+        {
+            this.recalculateDistances();
+            this.onVisualChange();
         }
 
         public void AddVertex(Vertex v)
         {
             this.vertices.AddLast(v);
-            v.Changed += this.onChange;
-            this.onChange();
+            v.Changed += this.onArithmeticChange;
+            this.onArithmeticChange();
         }
 
         public void AddEdge(Edge e)
         {
             this.edges.AddLast(e);
-            this.onChange();
+            this.onArithmeticChange();
         }
 
         public void AddMarker(Player p, Edge e, float t)
@@ -50,8 +55,8 @@ namespace GraphVoronoi.Graphs
             Marker m;
             this.markers.AddLast(m = new Marker(this, p, e, t));
             e.AddMarker(m);
-            m.Changed += this.onChange;
-            this.onChange();
+            m.Changed += this.onArithmeticChange;
+            this.onArithmeticChange();
         }
 
         public void RemoveVertex(Vertex v)
@@ -69,8 +74,8 @@ namespace GraphVoronoi.Graphs
                     curr = curr.Next;
             }
 
-            v.Changed -= this.onChange;
-            this.onChange();
+            v.Changed -= this.onArithmeticChange;
+            this.onArithmeticChange();
         }
 
         public void RemoveEdge(Edge e)
@@ -88,28 +93,28 @@ namespace GraphVoronoi.Graphs
                     curr = curr.Next;
             }
 
-            this.onChange();
+            this.onArithmeticChange();
         }
 
         public void RemoveMarker(Marker m)
         {
             this.markers.Remove(m);
             m.Edge.RemoveMarker(m);
-            m.Changed -= this.onChange;
-            this.onChange();
+            m.Changed -= this.onArithmeticChange;
+            this.onArithmeticChange();
         }
 
         public void RegisterGhostEdge(GhostEdge edge)
         {
             this.currentGhostEdge = edge;
-            this.currentGhostEdge.Changed += this.onChange;
+            this.currentGhostEdge.Changed += this.onVisualChange;
         }
 
         public void UnregisterGhostEdge()
         {
-            this.currentGhostEdge.Changed -= this.onChange;
+            this.currentGhostEdge.Changed -= this.onVisualChange;
             this.currentGhostEdge = null;
-            this.onChange();
+            this.onArithmeticChange();
         }
 
         public Vertex GetVertexAt(PointF position)
