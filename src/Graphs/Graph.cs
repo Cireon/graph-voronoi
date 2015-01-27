@@ -40,6 +40,7 @@ namespace GraphVoronoi.Graphs
         private void onArithmeticChange()
         {
             this.recalculateDistances();
+            this.recalculateCriticalPoints();
             this.onVisualChange();
         }
 
@@ -98,6 +99,9 @@ namespace GraphVoronoi.Graphs
                 else
                     curr = curr.Next;
             }
+
+            e.From.RemoveAdjacency(e.To);
+            e.To.RemoveAdjacency(e.From);
 
             this.onArithmeticChange();
         }
@@ -236,6 +240,113 @@ namespace GraphVoronoi.Graphs
                     v.SetStaticOwner(new VertexOwner(markerIndices[currIndex], currD));
                 vi++;
             }
+        }
+
+        private void recalculateCriticalPoints()
+        {
+            foreach (var e in this.edges)
+                e.ClearCriticalPoints();
+
+            if (this.CalculationsDisabled || this.vertices.Count == 0)
+                return;
+
+            var n = this.vertices.Count;
+            int index = 0;
+            var vertexDict = this.vertices.ToDictionary(v => v, v => index++);
+
+            foreach (var v in this.vertices.Where(v => v.Degree > 2))
+            {
+                var parents = new int[n];
+                var ds = new double[n];
+                var visited = new bool[n];
+
+                var si = vertexDict[v];
+
+                for (int i = 0; i < n; i++)
+                {
+                    ds[i] = i == si ? 0 : double.PositiveInfinity;
+                    visited[i] = i == si;
+                }
+
+                var q = new PriorityQueue<double, Vertex>(n);
+                q.Enqueue(0, v);
+
+                while (!q.IsEmpty)
+                {
+                    var c = q.DequeueValue();
+                    foreach (var t in c.AdjacentVertices)
+                    {
+                        var u = t.Item1;
+                        var e = t.Item2;
+
+                        var ci = vertexDict[c];
+                        var ui = vertexDict[u];
+
+                        if (ds[ui] <= ds[ci] + e.Length) continue;
+
+                        ds[ui] = ds[ci] + e.Length;
+                        parents[ui] = ci;
+
+                        if (visited[ui])
+                            q.DecreasePriority(u, ds[ui]);
+                        else
+                            q.Enqueue(ds[ui], u);
+
+                        visited[ui] = true;
+                    }
+                }
+
+                foreach (var e in this.edges.Where(edge =>
+                {
+                    var i1 = vertexDict[edge.From];
+                    var i2 = vertexDict[edge.To];
+                    return parents[i1] != i2 && parents[i2] != i1;
+                }))
+                {
+                    var i1 = vertexDict[e.From];
+                    var i2 = vertexDict[e.To];
+                    var t = .5f + .5f * (float)((ds[i2] - ds[i1]) / e.Length);
+                    e.AddCriticalPoint(new CriticalPoint(e, t));
+                }
+
+                double closestD = double.PositiveInfinity;
+                Edge closestE = null;
+                foreach (var m in this.markers)
+                {
+                    var i1 = vertexDict[m.Edge.From];
+                    var i2 = vertexDict[m.Edge.To];
+                    var w = m.Edge.Length;
+
+                    var d = Math.Min(ds[i1] + m.T * w, ds[i2] + (1 - m.T) * w);
+                    if (!(d < closestD)) continue;
+                    closestD = d;
+                    closestE = m.Edge;
+                }
+
+                foreach (var e in this.edges.Where(e => e != closestE))
+                {
+                    var w = e.Length;
+                    var i1 = vertexDict[e.From];
+                    var i2 = vertexDict[e.To];
+
+                    if (closestD >= ds[i1] && closestD <= ds[i1] + w)
+                        e.AddCriticalPoint(new CriticalPoint(e, (float)((closestD - ds[i1]) / w)));
+                    if (closestD >= ds[i2] && closestD <= ds[i2] + w)
+                        e.AddCriticalPoint(new CriticalPoint(e, 1 - (float)((closestD - ds[i2]) / w)));
+                }
+            }
+        }
+
+        private static bool between(double value, double m1, double m2)
+        {
+            if (m1 > m2)
+            {
+                var tmp = m2;
+                m2 = m1;
+                m1 = tmp;
+            }
+
+            return value >= m1 && value <= m2;
         }
     }
 }

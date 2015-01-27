@@ -14,7 +14,8 @@ namespace GraphVoronoi.Graphs
         public Vertex From { get { return this.from; } }
         public Vertex To { get { return this.to; } }
 
-        private readonly SortedSet<IEdgeObject> objectSet = new SortedSet<IEdgeObject>(EdgeObjectComparer.Instance); 
+        private readonly SortedSet<IColouredEdgeObject> objectSet = new SortedSet<IColouredEdgeObject>(EdgeObjectComparer.Instance);
+        private readonly SortedSet<CriticalPoint> criticalPoints = new SortedSet<CriticalPoint>(EdgeObjectComparer.Instance); 
 
         public double Length
         {
@@ -33,18 +34,28 @@ namespace GraphVoronoi.Graphs
 
             this.objectSet.Add(new VertexEdgeObject(from, 0));
             this.objectSet.Add(new VertexEdgeObject(to, 1));
+
+            this.from.AddAdjacency(to, this);
+            this.to.AddAdjacency(from, this);
         }
 
         public void Draw(GraphicsHelper graphics, PlayerScores scores)
         {
             graphics.DrawEdge(this.from.Position, this.to.Position);
 
-            if (this.from.Owner == null)
+            if (this.from.Owner == null && this.criticalPoints.Count == 0)
                 return;
 
-            var w = this.Length;
             var diffX = this.To.Position.X - this.From.Position.X;
             var diffY = this.To.Position.Y - this.From.Position.Y;
+
+            if (this.from.Owner == null)
+            {
+                this.drawCriticalPoints(graphics, diffX, diffY);
+                return;
+            }
+
+            var w = this.Length;
 
             var objects = this.objectSet.ToList();
 
@@ -71,6 +82,14 @@ namespace GraphVoronoi.Graphs
                     new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY), curr.Color);
                 scores.AddScore(curr.Player, (t2 - t1) * w);
             }
+
+            this.drawCriticalPoints(graphics, diffX, diffY);
+        }
+
+        private void drawCriticalPoints(GraphicsHelper graphics, float diffX, float diffY)
+        {
+            foreach (var p in this.criticalPoints)
+                graphics.DrawCriticalPoint(new PointF(this.from.Position.X + p.T * diffX, this.from.Position.Y + p.T * diffY));
         }
 
         public float? OnMouseDown(PointF position)
@@ -113,6 +132,16 @@ namespace GraphVoronoi.Graphs
         public void RemoveMarker(Marker m)
         {
             this.objectSet.Remove(m);
+        }
+
+        public void AddCriticalPoint(CriticalPoint p)
+        {
+            this.criticalPoints.Add(p);
+        }
+
+        public void ClearCriticalPoints()
+        {
+            this.criticalPoints.Clear();
         }
     }
 }

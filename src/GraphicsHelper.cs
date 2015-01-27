@@ -7,6 +7,7 @@ namespace GraphVoronoi
     {
         private const float vertexOuterDrawRadius = 10f;
         private const float vertexInnerDrawRadius = 8f;
+        private const float criticalPointDrawRadius = 3f;
         private const float edgeOuterThickness = 8f;
         private const float edgeInnerThickness = 4f;
         private const int ghostAlpha = 160;
@@ -29,6 +30,14 @@ namespace GraphVoronoi
 
             if (color.HasValue)
                 this.DrawMarker(position, color.Value);
+        }
+
+        public void DrawCriticalPoint(PointF position)
+        {
+            const float r = GraphicsHelper.criticalPointDrawRadius;
+
+            var brush = new SolidBrush(Color.White);
+            this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
         }
 
         public void DrawMarker(PointF position, Color color)

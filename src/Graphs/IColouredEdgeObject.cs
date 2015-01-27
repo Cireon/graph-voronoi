@@ -5,13 +5,17 @@ namespace GraphVoronoi.Graphs
 {
     interface IEdgeObject
     {
-        Color Color { get; }
         float T { get; }
+    }
+
+    interface IColouredEdgeObject : IEdgeObject
+    {
+        Color Color { get; }
         Player Player { get; }
         double Distance { get; }
     }
 
-    sealed class VertexEdgeObject : IEdgeObject
+    sealed class VertexEdgeObject : IColouredEdgeObject
     {
         private readonly Vertex vertex;
         private readonly float t;

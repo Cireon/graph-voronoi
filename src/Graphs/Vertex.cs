@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace GraphVoronoi.Graphs
 {
@@ -13,6 +16,9 @@ namespace GraphVoronoi.Graphs
 
         public VertexOwner Owner { get { return this.staticOwner; } }
         public Color Color { get { return this.Owner == null ? Color.Black : this.Owner.Color; } }
+
+        public readonly LinkedList<Tuple<Vertex, Edge>> AdjacentVertices = new LinkedList<Tuple<Vertex, Edge>>();
+        public int Degree { get { return this.AdjacentVertices.Count; } }
 
         public event VoidEventHandler Changed;
 
@@ -57,8 +63,7 @@ namespace GraphVoronoi.Graphs
 
         public bool HasEdgeTo(Vertex other)
         {
-            // todo: implement
-            return false;
+            return this.AdjacentVertices.Any(t => t.Item1 == other);
         }
 
         public void ResetStaticOwner()
@@ -69,6 +74,18 @@ namespace GraphVoronoi.Graphs
         public void SetStaticOwner(VertexOwner owner)
         {
             this.staticOwner = owner;
+        }
+
+        public void AddAdjacency(Vertex v, Edge e)
+        {
+            this.AdjacentVertices.AddLast(new Tuple<Vertex, Edge>(v, e));
+        }
+
+        public void RemoveAdjacency(Vertex v)
+        {
+            var ts = this.AdjacentVertices.Where(t => t.Item1 == v).ToList();
+            foreach (var t in ts)
+                this.AdjacentVertices.Remove(t);
         }
     }
 }
