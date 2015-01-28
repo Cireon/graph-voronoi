@@ -21,7 +21,7 @@ namespace GraphVoronoi
             this.size = size;
         }
 
-        public void DrawVertex(PointF position, Color? color)
+        public void DrawVertex(PointF position, Color? color, bool highlighted)
         {
             const float r = GraphicsHelper.vertexOuterDrawRadius;
 
@@ -29,7 +29,9 @@ namespace GraphVoronoi
             this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
 
             if (color.HasValue)
-                this.DrawMarker(position, color.Value);
+                this.DrawMarker(position, color.Value, highlighted);
+            else if (highlighted)
+                this.drawHighlightCircle(position, r);
         }
 
         public void DrawCriticalPoint(PointF position)
@@ -40,12 +42,21 @@ namespace GraphVoronoi
             this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
         }
 
-        public void DrawMarker(PointF position, Color color)
+        public void DrawMarker(PointF position, Color color, bool highlighted)
         {
             const float r = GraphicsHelper.vertexInnerDrawRadius;
 
             var brush = new SolidBrush(color);
             this.graphics.FillEllipse(brush, position.X - r, position.Y - r, 2 * r, 2 * r);
+
+            if (highlighted)
+                this.drawHighlightCircle(position, r);
+        }
+
+        private void drawHighlightCircle(PointF position, float r)
+        {
+            var pen = new Pen(Color.White, .2f * r);
+            this.graphics.DrawEllipse(pen, position.X - r, position.Y - r, 2 * r, 2 * r);
         }
 
         public void DrawEdge(PointF from, PointF to, bool ghost = false)

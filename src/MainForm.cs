@@ -15,6 +15,7 @@ namespace GraphVoronoi
 
         private Graph graph;
         private IDraggable currentDraggable;
+        private IHighlightable currentlyHighlighted;
         private Mode currentMode = Mode.Vertex;
         private int currentPlayerIndex;
         private Player currentPlayer { get { return this.players[this.currentPlayerIndex]; } }
@@ -105,6 +106,16 @@ namespace GraphVoronoi
         {
             if (this.currentDraggable != null)
                 this.currentDraggable.OnMouseMove(mouseEventArgs.Location);
+
+            var p = this.graph.GetCriticalPointAt(mouseEventArgs.Location);
+            if (p == this.currentlyHighlighted) return;
+
+            if (this.currentlyHighlighted != null)
+                this.currentlyHighlighted.UnHighlight();
+            this.currentlyHighlighted = p;
+            if (this.currentlyHighlighted != null)
+                this.currentlyHighlighted.Highlight();
+            this.graph.OnVisualChange();
         }
 
         private void setGraph(Graph g = null)

@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="Graphs\GraphIO.cs" />
     <Compile Include="Graphs\IColouredEdgeObject.cs" />
+    <Compile Include="Graphs\IHighlightable.cs" />
     <Compile Include="Graphs\Marker.cs" />
     <Compile Include="Graphs\Vertex.cs" />
     <Compile Include="Graphs\VertexOwner.cs" />

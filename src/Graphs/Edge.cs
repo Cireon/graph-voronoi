@@ -97,6 +97,21 @@ namespace GraphVoronoi.Graphs
             return this.ProjectPoint(position, true);
         }
 
+        public CriticalPoint GetCriticalPointAt(PointF position)
+        {
+            var diffX = this.To.Position.X - this.From.Position.X;
+            var diffY = this.To.Position.Y - this.From.Position.Y;
+
+            return this.criticalPoints.FirstOrDefault(p =>
+            {
+                var pPosX = this.From.Position.X + p.T * diffX;
+                var pPosY = this.From.Position.Y + p.T * diffY;
+
+                return (position.X - pPosX) * (position.X - pPosX) + (position.Y - pPosY) * (position.Y - pPosY) <=
+                    .5f * collisionThickness;
+            });
+        }
+
         public float? ProjectPoint(PointF position, bool failOnNoCollision = false)
         {
             var x1 = this.from.Position.X;

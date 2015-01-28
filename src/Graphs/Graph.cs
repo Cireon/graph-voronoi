@@ -31,7 +31,7 @@ namespace GraphVoronoi.Graphs
             this.players = players;
         }
 
-        private void onVisualChange()
+        public void OnVisualChange()
         {
             if (this.Changed != null)
                 this.Changed();
@@ -41,7 +41,7 @@ namespace GraphVoronoi.Graphs
         {
             this.recalculateDistances();
             this.recalculateCriticalPoints();
-            this.onVisualChange();
+            this.OnVisualChange();
         }
 
         public void AddVertex(Vertex v)
@@ -117,12 +117,12 @@ namespace GraphVoronoi.Graphs
         public void RegisterGhostEdge(GhostEdge edge)
         {
             this.currentGhostEdge = edge;
-            this.currentGhostEdge.Changed += this.onVisualChange;
+            this.currentGhostEdge.Changed += this.OnVisualChange;
         }
 
         public void UnregisterGhostEdge()
         {
-            this.currentGhostEdge.Changed -= this.onVisualChange;
+            this.currentGhostEdge.Changed -= this.OnVisualChange;
             this.currentGhostEdge = null;
             this.onArithmeticChange();
         }
@@ -149,6 +149,11 @@ namespace GraphVoronoi.Graphs
         public Marker GetMarkerAt(PointF position)
         {
             return this.markers.FirstOrDefault(marker => marker.OnMouseDown(position));
+        }
+
+        public CriticalPoint GetCriticalPointAt(PointF position)
+        {
+            return this.edges.Select(e => e.GetCriticalPointAt(position)).FirstOrDefault(p => p != null);
         }
 
         public void Draw(GraphicsHelper graphics)
@@ -306,9 +311,10 @@ namespace GraphVoronoi.Graphs
                     var i1 = vertexDict[e.From];
                     var i2 = vertexDict[e.To];
                     var t = .5f + .5f * (float)((ds[i2] - ds[i1]) / e.Length);
-                    e.AddCriticalPoint(new CriticalPoint(e, t));
+                    e.AddCriticalPoint(new CriticalPoint(e, t, v));
                 }
 
+                Marker closestM = null;
                 double closestD = double.PositiveInfinity;
                 Edge closestE = null;
                 foreach (var m in this.markers)
@@ -319,6 +325,7 @@ namespace GraphVoronoi.Graphs
 
                     var d = Math.Min(ds[i1] + m.T * w, ds[i2] + (1 - m.T) * w);
                     if (!(d < closestD)) continue;
+                    closestM = m;
                     closestD = d;
                     closestE = m.Edge;
                 }
@@ -330,9 +337,9 @@ namespace GraphVoronoi.Graphs
                     var i2 = vertexDict[e.To];
 
                     if (closestD >= ds[i1] && closestD <= ds[i1] + w)
-                        e.AddCriticalPoint(new CriticalPoint(e, (float)((closestD - ds[i1]) / w)));
+                        e.AddCriticalPoint(new CriticalPoint(e, (float)((closestD - ds[i1]) / w), v, closestM));
                     if (closestD >= ds[i2] && closestD <= ds[i2] + w)
-                        e.AddCriticalPoint(new CriticalPoint(e, 1 - (float)((closestD - ds[i2]) / w)));
+                        e.AddCriticalPoint(new CriticalPoint(e, 1 - (float)((closestD - ds[i2]) / w), v, closestM));
                 }
             }
         }

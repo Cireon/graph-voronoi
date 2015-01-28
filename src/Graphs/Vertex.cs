@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Vertex : IDraggable
+    sealed class Vertex : IDraggable, IHighlightable
     {
         public const float CollisionRadius = 20f;
 
@@ -13,6 +13,8 @@ namespace GraphVoronoi.Graphs
         private PointF? dragOffset;
 
         private VertexOwner staticOwner;
+
+        private bool highlighted;
 
         public VertexOwner Owner { get { return this.staticOwner; } }
         public Color Color { get { return this.Owner == null ? Color.Black : this.Owner.Color; } }
@@ -29,7 +31,7 @@ namespace GraphVoronoi.Graphs
 
         public void Draw(GraphicsHelper graphics)
         {
-            graphics.DrawVertex(this.Position, this.Color);
+            graphics.DrawVertex(this.Position, this.Color, this.highlighted);
         }
 
         public bool OnMouseDown(PointF point)
@@ -86,6 +88,16 @@ namespace GraphVoronoi.Graphs
             var ts = this.AdjacentVertices.Where(t => t.Item1 == v).ToList();
             foreach (var t in ts)
                 this.AdjacentVertices.Remove(t);
+        }
+
+        public void Highlight()
+        {
+            this.highlighted = true;
+        }
+
+        public void UnHighlight()
+        {
+            this.highlighted = false;
         }
     }
 }

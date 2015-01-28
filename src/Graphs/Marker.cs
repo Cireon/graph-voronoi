@@ -2,7 +2,7 @@
 
 namespace GraphVoronoi.Graphs
 {
-    sealed class Marker : IColouredEdgeObject, IDraggable
+    sealed class Marker : IColouredEdgeObject, IDraggable, IHighlightable
     {
         private readonly Graph graph;
         private readonly Player player;
@@ -10,6 +10,8 @@ namespace GraphVoronoi.Graphs
         public Player Player { get { return this.player; } }
         public Edge Edge { get; private set; }
         public float T { get; private set; }
+
+        private bool highlighted;
 
         public Color Color { get { return this.player.Color; } }
         public double Distance { get { return 0; } }
@@ -44,7 +46,7 @@ namespace GraphVoronoi.Graphs
 
         public void Draw(GraphicsHelper graphics)
         {
-            graphics.DrawMarker(this.position, this.Color);
+            graphics.DrawMarker(this.position, this.Color, this.highlighted);
         }
 
         public void OnMouseMove(PointF newPosition)
@@ -79,5 +81,15 @@ namespace GraphVoronoi.Graphs
         }
 
         public void OnMouseRelease() { }
+
+        public void Highlight()
+        {
+            this.highlighted = true;
+        }
+
+        public void UnHighlight()
+        {
+            this.highlighted = false;
+        }
     }
 }
