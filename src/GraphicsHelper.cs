@@ -15,10 +15,13 @@ namespace GraphVoronoi
         private readonly Graphics graphics;
         private readonly Size size;
 
-        public GraphicsHelper(Graphics graphics, Size size)
+        public readonly DrawSettings Settings;
+
+        public GraphicsHelper(Graphics graphics, Size size, DrawSettings settings)
         {
             this.graphics = graphics;
             this.size = size;
+            this.Settings = settings;
         }
 
         public void DrawVertex(PointF position, Color? color, bool highlighted)

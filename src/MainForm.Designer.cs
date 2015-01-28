@@ -43,10 +43,15 @@
             this.btnColorGreen = new System.Windows.Forms.Button();
             this.btnColorYellow = new System.Windows.Forms.Button();
             this.chkCalculationDisabled = new System.Windows.Forms.CheckBox();
-            this.panel = new GraphVoronoi.GraphPanel();
             this.openGraphDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveGraphDialog = new System.Windows.Forms.SaveFileDialog();
+            this.panDrawModes = new System.Windows.Forms.Panel();
+            this.radDrawColours = new System.Windows.Forms.RadioButton();
+            this.radDrawWinAreas = new System.Windows.Forms.RadioButton();
+            this.chkDrawCriticalPoints = new System.Windows.Forms.CheckBox();
+            this.panel = new GraphVoronoi.GraphPanel();
             this.mainMenu.SuspendLayout();
+            this.panDrawModes.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -194,16 +199,6 @@
             this.chkCalculationDisabled.UseVisualStyleBackColor = true;
             this.chkCalculationDisabled.CheckedChanged += new System.EventHandler(this.chkCalculationDisabled_CheckedChanged);
             // 
-            // panel
-            // 
-            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel.Location = new System.Drawing.Point(0, 25);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(1052, 656);
-            this.panel.TabIndex = 1;
-            // 
             // openGraphDialog
             // 
             this.openGraphDialog.Filter = "Text files|*.txt";
@@ -216,11 +211,70 @@
             this.saveGraphDialog.Title = "Save graph";
             this.saveGraphDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveGraphDialog_FileOk);
             // 
+            // panDrawModes
+            // 
+            this.panDrawModes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panDrawModes.Controls.Add(this.radDrawWinAreas);
+            this.panDrawModes.Controls.Add(this.radDrawColours);
+            this.panDrawModes.Location = new System.Drawing.Point(1053, 216);
+            this.panDrawModes.Name = "panDrawModes";
+            this.panDrawModes.Size = new System.Drawing.Size(210, 46);
+            this.panDrawModes.TabIndex = 9;
+            // 
+            // radDrawColours
+            // 
+            this.radDrawColours.AutoSize = true;
+            this.radDrawColours.Checked = true;
+            this.radDrawColours.Location = new System.Drawing.Point(5, 3);
+            this.radDrawColours.Name = "radDrawColours";
+            this.radDrawColours.Size = new System.Drawing.Size(87, 17);
+            this.radDrawColours.TabIndex = 0;
+            this.radDrawColours.TabStop = true;
+            this.radDrawColours.Text = "Draw &colours";
+            this.radDrawColours.UseVisualStyleBackColor = true;
+            this.radDrawColours.CheckedChanged += new System.EventHandler(this.radDrawColours_CheckedChanged);
+            // 
+            // radDrawWinAreas
+            // 
+            this.radDrawWinAreas.AutoSize = true;
+            this.radDrawWinAreas.Location = new System.Drawing.Point(5, 26);
+            this.radDrawWinAreas.Name = "radDrawWinAreas";
+            this.radDrawWinAreas.Size = new System.Drawing.Size(98, 17);
+            this.radDrawWinAreas.TabIndex = 1;
+            this.radDrawWinAreas.Text = "Draw &win areas";
+            this.radDrawWinAreas.UseVisualStyleBackColor = true;
+            this.radDrawWinAreas.CheckedChanged += new System.EventHandler(this.radDrawWinAreas_CheckedChanged);
+            // 
+            // chkDrawCriticalPoints
+            // 
+            this.chkDrawCriticalPoints.AutoSize = true;
+            this.chkDrawCriticalPoints.Checked = true;
+            this.chkDrawCriticalPoints.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawCriticalPoints.Location = new System.Drawing.Point(1058, 268);
+            this.chkDrawCriticalPoints.Name = "chkDrawCriticalPoints";
+            this.chkDrawCriticalPoints.Size = new System.Drawing.Size(115, 17);
+            this.chkDrawCriticalPoints.TabIndex = 10;
+            this.chkDrawCriticalPoints.Text = "Draw critical &points";
+            this.chkDrawCriticalPoints.UseVisualStyleBackColor = true;
+            this.chkDrawCriticalPoints.CheckedChanged += new System.EventHandler(this.chkDrawCriticalPoints_CheckedChanged);
+            // 
+            // panel
+            // 
+            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel.Location = new System.Drawing.Point(0, 25);
+            this.panel.Name = "panel";
+            this.panel.Size = new System.Drawing.Size(1052, 656);
+            this.panel.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.chkDrawCriticalPoints);
+            this.Controls.Add(this.panDrawModes);
             this.Controls.Add(this.chkCalculationDisabled);
             this.Controls.Add(this.btnColorYellow);
             this.Controls.Add(this.btnColorGreen);
@@ -236,6 +290,8 @@
             this.Text = "MainForm";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
+            this.panDrawModes.ResumeLayout(false);
+            this.panDrawModes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,6 +316,10 @@
         private System.Windows.Forms.CheckBox chkCalculationDisabled;
         private System.Windows.Forms.OpenFileDialog openGraphDialog;
         private System.Windows.Forms.SaveFileDialog saveGraphDialog;
+        private System.Windows.Forms.Panel panDrawModes;
+        private System.Windows.Forms.RadioButton radDrawWinAreas;
+        private System.Windows.Forms.RadioButton radDrawColours;
+        private System.Windows.Forms.CheckBox chkDrawCriticalPoints;
 
     }
 }

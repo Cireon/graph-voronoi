@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawSettings.cs" />
     <Compile Include="EventHandlers.cs" />
     <Compile Include="GraphicsHelper.cs" />
     <Compile Include="Graphs\CriticalPoint.cs" />

@@ -40,7 +40,7 @@ namespace GraphVoronoi
             paintEventArgs.Graphics.DrawImage(this.image, new Point(0, 0));
         }
 
-        public void DrawGraph(Graph graph)
+        public void DrawGraph(Graph graph, DrawSettings settings)
         {
             if (this.resized)
             {
@@ -55,7 +55,7 @@ namespace GraphVoronoi
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             if (graph != null)
-                graph.Draw(new GraphicsHelper(graphics, this.Size));
+                graph.Draw(new GraphicsHelper(graphics, this.Size, settings));
 
             var tmp = this.image;
             this.image = this.backbuffer;

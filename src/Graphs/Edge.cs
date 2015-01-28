@@ -90,6 +90,9 @@ namespace GraphVoronoi.Graphs
 
         private void drawCriticalPoints(GraphicsHelper graphics, float diffX, float diffY)
         {
+            if (!graphics.Settings.DrawCriticalPoints)
+                return;
+
             foreach (var p in this.criticalPoints)
                 graphics.DrawCriticalPoint(new PointF(this.from.Position.X + p.T * diffX, this.from.Position.Y + p.T * diffY));
         }

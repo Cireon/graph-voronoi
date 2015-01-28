@@ -14,6 +14,7 @@ namespace GraphVoronoi
         }
 
         private Graph graph;
+        private readonly DrawSettings drawSettings;
         private IDraggable currentDraggable;
         private IHighlightable currentlyHighlighted;
         private Mode currentMode = Mode.Vertex;
@@ -32,6 +33,11 @@ namespace GraphVoronoi
                 new Player(this.btnColorBlue.BackColor),
                 new Player(this.btnColorGreen.BackColor),
                 new Player(this.btnColorYellow.BackColor)
+            };
+            this.drawSettings = new DrawSettings
+            {
+                Mode = DrawMode.Colour,
+                DrawCriticalPoints = true
             };
 
             this.setGraph();
@@ -136,7 +142,7 @@ namespace GraphVoronoi
 
         private void onGraphChanged()
         {
-            this.panel.DrawGraph(this.graph);
+            this.panel.DrawGraph(this.graph, this.drawSettings);
         }
 
         private void newToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -227,6 +233,26 @@ namespace GraphVoronoi
         private void chkCalculationDisabled_CheckedChanged(object sender, System.EventArgs e)
         {
             this.graph.CalculationsDisabled = this.chkCalculationDisabled.Checked;
+        }
+
+        private void radDrawColours_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (radDrawColours.Checked)
+                this.drawSettings.Mode = DrawMode.Colour;
+            this.graph.OnVisualChange();
+        }
+
+        private void radDrawWinAreas_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (radDrawWinAreas.Checked)
+                this.drawSettings.Mode = DrawMode.WinArea;
+            this.graph.OnVisualChange();
+        }
+
+        private void chkDrawCriticalPoints_CheckedChanged(object sender, System.EventArgs e)
+        {
+            this.drawSettings.DrawCriticalPoints = chkDrawCriticalPoints.Checked;
+            this.graph.OnVisualChange();
         }
     }
 }
