@@ -26,6 +26,26 @@ namespace GraphVoronoi.Graphs
             }
         }
 
+        public Dictionary<Vertex, int> VertexDictionary
+        {
+            get
+            {
+                int index = 0;
+                return this.vertices.ToDictionary(v => v, v => index++);
+            }
+        }
+
+        public IEnumerable<Edge> Edges { get { return this.edges; } } 
+
+        public Dictionary<Player, int> PlayerDictionary
+        {
+            get
+            {
+                int index = 0;
+                return this.players.ToDictionary(p => p, p => index++);
+            }
+        }
+
         public Graph(Player[] players)
         {
             this.players = players;
@@ -256,8 +276,7 @@ namespace GraphVoronoi.Graphs
                 return;
 
             var n = this.vertices.Count;
-            int index = 0;
-            var vertexDict = this.vertices.ToDictionary(v => v, v => index++);
+            var vertexDict = this.VertexDictionary; 
 
             foreach (var v in this.vertices.Where(v => v.Degree > 2))
             {
@@ -279,12 +298,13 @@ namespace GraphVoronoi.Graphs
                 while (!q.IsEmpty)
                 {
                     var c = q.DequeueValue();
+                    var ci = vertexDict[c];
+
                     foreach (var t in c.AdjacentVertices)
                     {
                         var u = t.Item1;
                         var e = t.Item2;
 
-                        var ci = vertexDict[c];
                         var ui = vertexDict[u];
 
                         if (ds[ui] <= ds[ci] + e.Length) continue;
@@ -311,7 +331,8 @@ namespace GraphVoronoi.Graphs
                     var i1 = vertexDict[e.From];
                     var i2 = vertexDict[e.To];
                     var t = .5f + .5f * (float)((ds[i2] - ds[i1]) / e.Length);
-                    e.AddCriticalPoint(new CriticalPoint(e, t, v));
+                    e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.PathEqualLength,
+                        CriticalPoint.Direction.None, e, t, v));
                 }
 
                 Marker closestM = null;
@@ -337,23 +358,17 @@ namespace GraphVoronoi.Graphs
                     var i2 = vertexDict[e.To];
 
                     if (closestD >= ds[i1] && closestD <= ds[i1] + w)
-                        e.AddCriticalPoint(new CriticalPoint(e, (float)((closestD - ds[i1]) / w), v, closestM));
+                    {
+                        e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
+                            CriticalPoint.Direction.Increasing, e, (float) ((closestD - ds[i1]) / w), v, closestM));
+                    }
                     if (closestD >= ds[i2] && closestD <= ds[i2] + w)
-                        e.AddCriticalPoint(new CriticalPoint(e, 1 - (float)((closestD - ds[i2]) / w), v, closestM));
+                    {
+                        e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
+                            CriticalPoint.Direction.Decreasing, e, 1 - (float) ((closestD - ds[i2]) / w), v, closestM));
+                    }
                 }
             }
-        }
-
-        private static bool between(double value, double m1, double m2)
-        {
-            if (m1 > m2)
-            {
-                var tmp = m2;
-                m2 = m1;
-                m1 = tmp;
-            }
-
-            return value >= m1 && value <= m2;
         }
     }
 }

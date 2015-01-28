@@ -17,6 +17,8 @@ namespace GraphVoronoi.Graphs
         private readonly SortedSet<IColouredEdgeObject> objectSet = new SortedSet<IColouredEdgeObject>(EdgeObjectComparer.Instance);
         private readonly SortedSet<CriticalPoint> criticalPoints = new SortedSet<CriticalPoint>(EdgeObjectComparer.Instance); 
 
+        public IList<IColouredEdgeObject> ObjectSet { get { return this.objectSet.ToList(); } } 
+
         public double Length
         {
             get
