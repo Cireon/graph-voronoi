@@ -325,7 +325,7 @@ namespace GraphVoronoi.Graphs
                 {
                     var i1 = vertexDict[edge.From];
                     var i2 = vertexDict[edge.To];
-                    return parents[i1] != i2 && parents[i2] != i1;
+                    return visited[i1] && parents[i1] != i2 && parents[i2] != i1;
                 }))
                 {
                     var i1 = vertexDict[e.From];
@@ -350,6 +350,9 @@ namespace GraphVoronoi.Graphs
                     closestD = d;
                     closestE = m.Edge;
                 }
+
+                if (closestM == null)
+                    continue;
 
                 foreach (var e in this.edges.Where(e => e != closestE))
                 {
