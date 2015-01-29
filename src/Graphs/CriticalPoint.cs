@@ -99,10 +99,6 @@ namespace GraphVoronoi.Graphs
                 q.Enqueue(ds[si2], this.edge.To);
             }
 
-            var edgeHs = new HashSet<Edge> { this.edge };
-            var edgeList = new LinkedList<Edge>();
-            edgeList.AddLast(this.edge);
-
             while (q.Count > 0)
             {
                 var c = q.DequeueValue();
@@ -128,14 +124,8 @@ namespace GraphVoronoi.Graphs
                         q.Enqueue(ds[ui], u);
 
                     visited[ui] = true;
-                    if (!edgeHs.Contains(e))
-                    {
-                        edgeHs.Add(e);
-                        edgeList.AddLast(e);
-                    }
                 }
             }
-
 
             var playerDict = g.PlayerDictionary;
             var edges = g.Edges;
@@ -156,6 +146,7 @@ namespace GraphVoronoi.Graphs
                 }
                 
                 var objs = e.ObjectSet;
+                w = e.Length;
 
                 if (e == this.edge)
                 {
@@ -182,13 +173,21 @@ namespace GraphVoronoi.Graphs
                     var t1 = curr.T;
                     var t2 = curr.T;
 
+                    var currD = (prev == null && visited[i1])
+                        ? ds[i1]
+                        : (next == null && visited[i2] ? ds[i2] : curr.Distance);
+
                     if (prev != null)
                     {
-                        t1 = .5f * (prev.T + curr.T) + .5f * (float)((curr.Distance - prev.Distance) / w);
+                        var prevD = (i - 1 == 0) && visited[i1] ? ds[i1] : prev.Distance;
+
+                        t1 = .5f * (prev.T + curr.T) + .5f * (float)((currD - prevD) / w);
                     }
                     if (next != null)
                     {
-                        t2 = .5f * (curr.T + next.T) + .5f * (float)((next.Distance - curr.Distance) / w);
+                        var nextD = (i + 2 == objs.Count && visited[i2] ? ds[i2] : next.Distance);
+
+                        t2 = .5f * (curr.T + next.T) + .5f * (float)((nextD - currD) / w);
                     }
 
                     var playerIndex = (i == 0 && visited[i1]) || (i == objs.Count - 1 && visited[i2]) ||

@@ -276,7 +276,10 @@ namespace GraphVoronoi.Graphs
                 return;
 
             var n = this.vertices.Count;
-            var vertexDict = this.VertexDictionary; 
+            var vertexDict = this.VertexDictionary;
+
+            foreach (var v in this.vertices)
+                v.RecalculateDominatingAreas(this);
 
             foreach (var v in this.vertices.Where(v => v.Degree > 2))
             {

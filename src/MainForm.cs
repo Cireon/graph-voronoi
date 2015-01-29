@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using GraphVoronoi.Graphs;
 
@@ -52,6 +54,24 @@ namespace GraphVoronoi
         {
             if (this.currentDraggable != null)
                 this.currentDraggable.OnMouseRelease();
+
+            if (mouseEventArgs.Button == MouseButtons.Middle)
+            {
+                var vertex = this.graph.GetVertexAt(mouseEventArgs.Location);
+                if (vertex != null)
+                    Console.WriteLine(string.Join(",", vertex.DominatingAreas));
+                else
+                {
+                    var cp = this.graph.GetCriticalPointAt(mouseEventArgs.Location);
+                    if (cp != null)
+                    {
+                        Console.WriteLine(string.Join(",", cp.DominatingAreasFromBelow));
+                        Console.WriteLine(string.Join(",", cp.DominatingAreasFromAbove));
+                    }
+                }
+
+                return;
+            }
 
             switch (this.currentMode)
             {

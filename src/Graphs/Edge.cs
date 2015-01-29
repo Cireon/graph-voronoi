@@ -59,30 +59,142 @@ namespace GraphVoronoi.Graphs
 
             var w = this.Length;
 
-            var objects = this.objectSet.ToList();
-
-            for (int i = 0; i < objects.Count; i++)
+            switch (graphics.Settings.Mode)
             {
-                var prev = i - 1 >= 0 ? objects[i - 1] : null;
-                var curr = objects[i];
-                var next = i < objects.Count - 1 ? objects[i + 1] : null;
+                case DrawMode.Colour:
+                    var objects = this.objectSet.ToList();
 
-                var t1 = curr.T;
-                var t2 = curr.T;
+                    for (int i = 0; i < objects.Count; i++)
+                    {
+                        var prev = i - 1 >= 0 ? objects[i - 1] : null;
+                        var curr = objects[i];
+                        var next = i < objects.Count - 1 ? objects[i + 1] : null;
 
-                if (prev != null)
-                {
-                    t1 = .5f * (prev.T + curr.T) + .5f * (float)((curr.Distance - prev.Distance) / w);
-                }
-                if (next != null)
-                {
-                    t2 = .5f * (curr.T + next.T) + .5f * (float)((next.Distance - curr.Distance) / w);
-                }
+                        var t1 = curr.T;
+                        var t2 = curr.T;
 
-                graphics.DrawEdgeSegment(
-                    new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
-                    new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY), curr.Color);
-                scores.AddScore(curr.Player, (t2 - t1) * w);
+                        if (prev != null)
+                        {
+                            t1 = .5f * (prev.T + curr.T) + .5f * (float) ((curr.Distance - prev.Distance) / w);
+                        }
+                        if (next != null)
+                        {
+                            t2 = .5f * (curr.T + next.T) + .5f * (float) ((next.Distance - curr.Distance) / w);
+                        }
+
+                        graphics.DrawEdgeSegment(
+                            new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
+                            new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY), curr.Color);
+                        scores.AddScore(curr.Player, (t2 - t1) * w);
+                    }
+
+                    break;
+
+                case DrawMode.WinArea:
+                    var points = this.criticalPoints.ToList();
+                    var n = this.From.DominatingAreas.Length - 1;
+
+                    for (int i = 0; i <= points.Count; i++)
+                    {
+                        var scoresFrom = i == 0 ? this.From.DominatingAreas : points[i - 1].DominatingAreasFromAbove;
+                        var scoresTo = i == points.Count ? this.To.DominatingAreas : points[i].DominatingAreasFromBelow;
+
+                        var t1 = i == 0 ? 0 : points[i - 1].T;
+                        var t2 = i == points.Count ? 1 : points[i].T;
+
+                        var winFrom = scoresFrom.All(d => d <= scoresFrom[n]);
+                        var winTo = scoresTo.All(d => d <= scoresTo[n]);
+
+                        if (winFrom && winTo)
+                        {
+                            graphics.DrawEdgeSegment(
+                                new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
+                                new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY),
+                                Color.LimeGreen);
+                        }
+                        else
+                        {
+                            float w1 = t1;
+                            float w2 = t2;
+
+                            if (winFrom)
+                            {
+                                var y = scoresTo[n];
+
+                                for (int j = 0; j < n; j++)
+                                {
+                                    if (scoresTo[j] <= y)
+                                        continue;
+
+                                    var t = (scoresFrom[n] - scoresFrom[j]) /
+                                        (scoresTo[j] - scoresFrom[j] - scoresTo[n] + scoresFrom[n]);
+                                    w2 = Math.Min(w2, (float) t * (t2 - t1));
+                                }
+                            }
+                            else if (winTo)
+                            {
+                                var y = scoresFrom[n];
+
+                                for (int j = 0; j < n; j++)
+                                {
+                                    if (scoresFrom[j] <= y)
+                                        continue;
+
+                                    var t = (scoresFrom[n] - scoresFrom[j]) /
+                                        (scoresTo[j] - scoresFrom[j] - scoresTo[n] + scoresFrom[n]);
+                                    w1 = Math.Max(w1, (float) t * (t2 - t1));
+                                }
+                            }
+                            else
+                            {
+                                var y1 = scoresFrom[n];
+                                var y2 = scoresTo[n];
+
+                                for (int j = 0; j < n; j++)
+                                {
+                                    if (scoresFrom[j] <= y1 && scoresTo[j] <= y2)
+                                        continue;
+                                    if (scoresFrom[j] > y1 && scoresTo[j] > y2)
+                                    {
+                                        w1 = w2 = t2;
+                                        break;
+                                    }
+
+                                    var t = (scoresFrom[n] - scoresFrom[j]) /
+                                        (scoresTo[j] - scoresFrom[j] - scoresTo[n] + scoresFrom[n]);
+
+                                    if (scoresFrom[j] <= y1)
+                                        w2 = Math.Min(w2, (float) t * (t2 - t1));
+                                    else
+                                        w1 = Math.Max(w1, (float) t * (t2 - t1));
+                                }
+                            }
+
+                            if (t1 < w1)
+                            {
+                                graphics.DrawEdgeSegment(
+                                    new PointF(this.from.Position.X + t1 * diffX, this.from.Position.Y + t1 * diffY),
+                                    new PointF(this.from.Position.X + w1 * diffX, this.from.Position.Y + w1 * diffY),
+                                    Color.OrangeRed);
+                            }
+                            if (w1 < w2)
+                            {
+                                graphics.DrawEdgeSegment(
+                                    new PointF(this.from.Position.X + w1 * diffX, this.from.Position.Y + w1 * diffY),
+                                    new PointF(this.from.Position.X + w2 * diffX, this.from.Position.Y + w2 * diffY),
+                                    Color.LimeGreen);
+                            }
+                            if (w2 < t2)
+                            {
+                                graphics.DrawEdgeSegment(
+                                    new PointF(this.from.Position.X + w2 * diffX, this.from.Position.Y + w2 * diffY),
+                                    new PointF(this.from.Position.X + t2 * diffX, this.from.Position.Y + t2 * diffY),
+                                    Color.OrangeRed);
+                            }
+                        }
+                    }
+
+                    break;
             }
 
             this.drawCriticalPoints(graphics, diffX, diffY);
