@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GraphVoronoi.Graphs
@@ -9,7 +8,8 @@ namespace GraphVoronoi.Graphs
         public enum Type
         {
             MarkerEqualDistance,
-            PathEqualLength
+            PathEqualLength,
+            Site
         }
 
         public enum Direction
@@ -63,6 +63,10 @@ namespace GraphVoronoi.Graphs
                 case Type.PathEqualLength:
                     this.DominatingAreasFromAbove = this.DominatingAreasFromBelow = this.getDominatingAreas(g);
                     break;
+                case Type.Site:
+                    this.DominatingAreasFromBelow = this.getDominatingAreas(g, this.edge.From, this.edge.To);
+                    this.DominatingAreasFromAbove = this.getDominatingAreas(g, this.edge.To, this.edge.From);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
@@ -85,14 +89,14 @@ namespace GraphVoronoi.Graphs
             var si1 = vertexDict[this.edge.From];
             var si2 = vertexDict[this.edge.To];
 
-            if (this.T * w < ds[si1])
+            if (this.edge.From == alwaysTake || (this.T * w < ds[si1] && this.edge.From != neverTake))
             {
                 ds[si1] = this.T * w;
                 visited[si1] = true;
                 q.Enqueue(ds[si1], this.edge.From);
             }
 
-            if ((1 - this.T) * w < ds[si2])
+            if (this.edge.To == alwaysTake || ((1 - this.T) * w < ds[si2] && this.edge.To != neverTake))
             {
                 ds[si2] = (1 - this.T) * w;
                 visited[si2] = true;

@@ -280,6 +280,11 @@ namespace GraphVoronoi.Graphs
 
             foreach (var v in this.vertices)
                 v.RecalculateDominatingAreas(this);
+            foreach (var m in this.markers)
+            {
+                m.Edge.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.Site, CriticalPoint.Direction.None,
+                    m.Edge, m.T, m));
+            }
 
             foreach (var v in this.vertices.Where(v => v.Degree > 2))
             {
