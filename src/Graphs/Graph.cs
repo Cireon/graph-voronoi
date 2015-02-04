@@ -286,7 +286,7 @@ namespace GraphVoronoi.Graphs
                     m.Edge, m.T, m));
             }
 
-            foreach (var v in this.vertices.Where(v => v.Degree > 2))
+            foreach (var v in this.vertices.Where(ver => ver.Degree > 2))
             {
                 var parents = new int[n];
                 var ds = new double[n];
@@ -296,6 +296,7 @@ namespace GraphVoronoi.Graphs
 
                 for (int i = 0; i < n; i++)
                 {
+                    parents[i] = -1;
                     ds[i] = i == si ? 0 : double.PositiveInfinity;
                     visited[i] = i == si;
                 }
@@ -346,21 +347,36 @@ namespace GraphVoronoi.Graphs
                 Marker closestM = null;
                 double closestD = double.PositiveInfinity;
                 Edge closestE = null;
+                int closestV = -1;
+
                 foreach (var m in this.markers)
                 {
                     var i1 = vertexDict[m.Edge.From];
                     var i2 = vertexDict[m.Edge.To];
                     var w = m.Edge.Length;
 
-                    var d = Math.Min(ds[i1] + m.T * w, ds[i2] + (1 - m.T) * w);
-                    if (!(d < closestD)) continue;
+                    var d1 = ds[i1] + m.T * w;
+                    var d2 = ds[i2] + (1 - m.T) * w;
+
+                    var d = Math.Min(d1, d2);
+                    if (d >= closestD) continue;
                     closestM = m;
                     closestD = d;
                     closestE = m.Edge;
+                    closestV = d1 < d2 ? i1 : i2;
                 }
 
                 if (closestM == null)
                     continue;
+
+                int firstOnMPath = -1;
+                int node = closestV;
+                if (node != si)
+                {
+                    while (parents[node] != si)
+                        node = parents[node];
+                    firstOnMPath = node;
+                }
 
                 foreach (var e in this.edges.Where(e => e != closestE))
                 {
@@ -368,15 +384,41 @@ namespace GraphVoronoi.Graphs
                     var i1 = vertexDict[e.From];
                     var i2 = vertexDict[e.To];
 
-                    if (closestD >= ds[i1] && closestD <= ds[i1] + w)
+                    if (closestD >= ds[i1] && closestD <= ds[i1] + w && parents[i1] != i2)
                     {
-                        e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
-                            CriticalPoint.Direction.Increasing, e, (float) ((closestD - ds[i1]) / w), v, closestM));
+                        int firstOnCPath = -2;
+                        node = i1;
+                        if (node != si)
+                        {
+                            while (parents[node] != si)
+                                node = parents[node];
+                            firstOnCPath = node;
+                        }
+
+                        if (firstOnMPath != firstOnCPath)
+                        {
+                            e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
+                                CriticalPoint.Direction.Increasing, e, (float) ((closestD - ds[i1]) / w), v,
+                                closestM));
+                        }
                     }
-                    if (closestD >= ds[i2] && closestD <= ds[i2] + w)
+                    if (closestD >= ds[i2] && closestD <= ds[i2] + w && parents[i2] != i1)
                     {
-                        e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
-                            CriticalPoint.Direction.Decreasing, e, 1 - (float) ((closestD - ds[i2]) / w), v, closestM));
+                        int firstOnCPath = -2;
+                        node = i2;
+                        if (node != si)
+                        {
+                            while (parents[node] != si)
+                                node = parents[node];
+                            firstOnCPath = node;
+                        }
+
+                        if (firstOnMPath != firstOnCPath)
+                        {
+                            e.AddCriticalPoint(new CriticalPoint(this, CriticalPoint.Type.MarkerEqualDistance,
+                                CriticalPoint.Direction.Decreasing, e, 1 - (float) ((closestD - ds[i2]) / w), v,
+                                closestM));
+                        }
                     }
                 }
             }

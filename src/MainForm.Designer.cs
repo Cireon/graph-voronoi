@@ -46,8 +46,8 @@
             this.openGraphDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveGraphDialog = new System.Windows.Forms.SaveFileDialog();
             this.panDrawModes = new System.Windows.Forms.Panel();
-            this.radDrawColours = new System.Windows.Forms.RadioButton();
             this.radDrawWinAreas = new System.Windows.Forms.RadioButton();
+            this.radDrawColours = new System.Windows.Forms.RadioButton();
             this.chkDrawCriticalPoints = new System.Windows.Forms.CheckBox();
             this.panel = new GraphVoronoi.GraphPanel();
             this.mainMenu.SuspendLayout();
@@ -149,6 +149,7 @@
             // 
             // btnColorRed
             // 
+            this.btnColorRed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnColorRed.BackColor = System.Drawing.Color.Red;
             this.btnColorRed.Enabled = false;
             this.btnColorRed.Location = new System.Drawing.Point(1068, 147);
@@ -160,6 +161,7 @@
             // 
             // btnColorBlue
             // 
+            this.btnColorBlue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnColorBlue.BackColor = System.Drawing.Color.RoyalBlue;
             this.btnColorBlue.Location = new System.Drawing.Point(1113, 147);
             this.btnColorBlue.Name = "btnColorBlue";
@@ -170,6 +172,7 @@
             // 
             // btnColorGreen
             // 
+            this.btnColorGreen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnColorGreen.BackColor = System.Drawing.Color.Green;
             this.btnColorGreen.Location = new System.Drawing.Point(1158, 147);
             this.btnColorGreen.Name = "btnColorGreen";
@@ -180,6 +183,7 @@
             // 
             // btnColorYellow
             // 
+            this.btnColorYellow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnColorYellow.BackColor = System.Drawing.Color.Yellow;
             this.btnColorYellow.Location = new System.Drawing.Point(1203, 147);
             this.btnColorYellow.Name = "btnColorYellow";
@@ -190,6 +194,7 @@
             // 
             // chkCalculationDisabled
             // 
+            this.chkCalculationDisabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkCalculationDisabled.AutoSize = true;
             this.chkCalculationDisabled.Location = new System.Drawing.Point(1058, 180);
             this.chkCalculationDisabled.Name = "chkCalculationDisabled";
@@ -221,6 +226,17 @@
             this.panDrawModes.Size = new System.Drawing.Size(210, 46);
             this.panDrawModes.TabIndex = 9;
             // 
+            // radDrawWinAreas
+            // 
+            this.radDrawWinAreas.AutoSize = true;
+            this.radDrawWinAreas.Location = new System.Drawing.Point(5, 26);
+            this.radDrawWinAreas.Name = "radDrawWinAreas";
+            this.radDrawWinAreas.Size = new System.Drawing.Size(98, 17);
+            this.radDrawWinAreas.TabIndex = 1;
+            this.radDrawWinAreas.Text = "Draw &win areas";
+            this.radDrawWinAreas.UseVisualStyleBackColor = true;
+            this.radDrawWinAreas.CheckedChanged += new System.EventHandler(this.radDrawWinAreas_CheckedChanged);
+            // 
             // radDrawColours
             // 
             this.radDrawColours.AutoSize = true;
@@ -234,19 +250,9 @@
             this.radDrawColours.UseVisualStyleBackColor = true;
             this.radDrawColours.CheckedChanged += new System.EventHandler(this.radDrawColours_CheckedChanged);
             // 
-            // radDrawWinAreas
-            // 
-            this.radDrawWinAreas.AutoSize = true;
-            this.radDrawWinAreas.Location = new System.Drawing.Point(5, 26);
-            this.radDrawWinAreas.Name = "radDrawWinAreas";
-            this.radDrawWinAreas.Size = new System.Drawing.Size(98, 17);
-            this.radDrawWinAreas.TabIndex = 1;
-            this.radDrawWinAreas.Text = "Draw &win areas";
-            this.radDrawWinAreas.UseVisualStyleBackColor = true;
-            this.radDrawWinAreas.CheckedChanged += new System.EventHandler(this.radDrawWinAreas_CheckedChanged);
-            // 
             // chkDrawCriticalPoints
             // 
+            this.chkDrawCriticalPoints.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkDrawCriticalPoints.AutoSize = true;
             this.chkDrawCriticalPoints.Checked = true;
             this.chkDrawCriticalPoints.CheckState = System.Windows.Forms.CheckState.Checked;

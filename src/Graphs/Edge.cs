@@ -128,7 +128,7 @@ namespace GraphVoronoi.Graphs
 
                                     var t = (scoresFrom[n] - scoresFrom[j]) /
                                         (scoresTo[j] - scoresFrom[j] - scoresTo[n] + scoresFrom[n]);
-                                    w2 = Math.Min(w2, (float) t * (t2 - t1));
+                                    w2 = Math.Min(w2, t1 + (float) t * (t2 - t1));
                                 }
                             }
                             else if (winTo)
@@ -142,7 +142,7 @@ namespace GraphVoronoi.Graphs
 
                                     var t = (scoresFrom[n] - scoresFrom[j]) /
                                         (scoresTo[j] - scoresFrom[j] - scoresTo[n] + scoresFrom[n]);
-                                    w1 = Math.Max(w1, (float) t * (t2 - t1));
+                                    w1 = Math.Max(w1, t1 + (float) t * (t2 - t1));
                                 }
                             }
                             else

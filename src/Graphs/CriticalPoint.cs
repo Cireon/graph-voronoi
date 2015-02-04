@@ -183,13 +183,13 @@ namespace GraphVoronoi.Graphs
 
                     if (prev != null)
                     {
-                        var prevD = (i - 1 == 0) && visited[i1] ? ds[i1] : prev.Distance;
+                        var prevD = i - 1 == 0 && visited[i1] ? ds[i1] : prev.Distance;
 
                         t1 = .5f * (prev.T + curr.T) + .5f * (float)((currD - prevD) / w);
                     }
                     if (next != null)
                     {
-                        var nextD = (i + 2 == objs.Count && visited[i2] ? ds[i2] : next.Distance);
+                        var nextD = i + 2 == objs.Count && visited[i2] ? ds[i2] : next.Distance;
 
                         t2 = .5f * (curr.T + next.T) + .5f * (float)((nextD - currD) / w);
                     }
