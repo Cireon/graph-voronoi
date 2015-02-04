@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using GraphVoronoi.Graphs;
 
@@ -294,7 +293,7 @@ namespace GraphVoronoi
 
         private void generateFormOnGenerateButtonClicked()
         {
-            this.setGraph(Graph.Generate(this.players));
+            this.setGraph(Graph.Generate(this.generateForm.GetParameters(), this.players, this.panel.Size));
         }
     }
 }

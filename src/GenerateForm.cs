@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using GraphVoronoi.Graphs;
 
 namespace GraphVoronoi
 {
-    public partial class GenerateForm : Form
+    partial class GenerateForm : Form
     {
         public event VoidEventHandler GenerateButtonClicked;
 
@@ -16,6 +17,20 @@ namespace GraphVoronoi
         {
             if (this.GenerateButtonClicked != null)
                 this.GenerateButtonClicked();
+        }
+
+        public Graph.GenerationParameters GetParameters()
+        {
+            return new Graph.GenerationParameters
+            {
+                NVertices = (int)this.nudVertices.Value,
+                NEdges = (int)this.nudEdges.Value,
+                NSites = (int)this.nudSites.Value,
+                GridWidth = (int)this.nudGridX.Value,
+                GridHeight = (int)this.nudGridY.Value,
+                PerturbationPercentage = .01f * this.tbPerturbation.Value,
+                ForcePlanar = this.cbPlanar.Checked
+            };
         }
     }
 }
