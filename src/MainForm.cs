@@ -21,9 +21,15 @@ namespace GraphVoronoi
         private IHighlightable currentlyHighlighted;
         private Mode currentMode = Mode.Vertex;
         private int currentPlayerIndex;
-        private Player currentPlayer { get { return this.players[this.currentPlayerIndex]; } }
+
+        private Player currentPlayer
+        {
+            get { return this.players[this.currentPlayerIndex]; }
+        }
 
         private readonly Player[] players;
+
+        private GenerateForm generateForm;
 
         public MainForm()
         {
@@ -180,6 +186,17 @@ namespace GraphVoronoi
             this.saveGraphDialog.ShowDialog();
         }
 
+        private void generateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.generateForm == null)
+            {
+                this.generateForm = new GenerateForm();
+                this.generateForm.GenerateButtonClicked += this.generateFormOnGenerateButtonClicked;
+            }
+
+            this.generateForm.Show();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             Application.Exit();
@@ -273,6 +290,11 @@ namespace GraphVoronoi
         {
             this.drawSettings.DrawCriticalPoints = chkDrawCriticalPoints.Checked;
             this.graph.OnVisualChange();
+        }
+
+        private void generateFormOnGenerateButtonClicked()
+        {
+            this.setGraph(Graph.Generate(this.players));
         }
     }
 }

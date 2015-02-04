@@ -41,6 +41,12 @@
   <ItemGroup>
     <Compile Include="DrawSettings.cs" />
     <Compile Include="EventHandlers.cs" />
+    <Compile Include="GenerateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateForm.Designer.cs">
+      <DependentUpon>GenerateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GraphicsHelper.cs" />
     <Compile Include="Graphs\CriticalPoint.cs" />
     <Compile Include="Graphs\Edge.cs" />
@@ -49,6 +55,7 @@
     <Compile Include="GraphPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Graphs\GraphGeneration.cs" />
     <Compile Include="Graphs\GraphIO.cs" />
     <Compile Include="Graphs\IColouredEdgeObject.cs" />
     <Compile Include="Graphs\IHighlightable.cs" />
@@ -56,6 +63,7 @@
     <Compile Include="Graphs\Vertex.cs" />
     <Compile Include="Graphs\VertexOwner.cs" />
     <Compile Include="IDraggable.cs" />
+    <Compile Include="LinqHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +75,9 @@
     <Compile Include="PriorityQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GenerateForm.resx">
+      <DependentUpon>GenerateForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
